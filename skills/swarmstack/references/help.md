@@ -44,7 +44,7 @@ If the question is broad, offer one choice between setup, commands, review or tr
 
 Examples of help questions:
 
-- /swarmstack-help Which command queues a backend priority?
-- /swarmstack-help Why is my new direction waiting?
-- /swarmstack-help How do I add this to an existing project safely?
-- /swarmstack-help What must an issue lead finish before reporting Done?
+- /swarmstack help Which command queues a backend priority?
+- /swarmstack help Why is my new direction waiting?
+- /swarmstack help How do I add this to an existing project safely?
+- /swarmstack help What must an issue lead finish before reporting Done?

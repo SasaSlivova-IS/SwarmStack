@@ -34,7 +34,7 @@ A small Python script keeps track of these commands in a local SQLite file, so t
 
 Lost track? `/loose-ends cover` goes back through the current conversation and lists unanswered questions, offers nobody confirmed, contradictions and missing pieces. `/loose-ends catchup` catches you up on the whole project after time away, and `/loose-ends good morning` covers the night since your last message. Neither changes anything; open decisions come back as A–D questions.
 
-Not sure what to ask? `/swarmstack help <question>` (or `/swarmstack-help <question>`) answers from the documentation, suggests one prompt and links the source. It doesn't start work or message the orchestrator. Your chat tool must be able to find the skill first; check that during setup.
+Not sure what to ask? `/swarmstack help <question>` answers from the documentation, suggests one prompt and links the source. It doesn't start work or message the orchestrator. Your chat tool must be able to find the skill first; check that during setup.
 
 ## Add it to a project
 

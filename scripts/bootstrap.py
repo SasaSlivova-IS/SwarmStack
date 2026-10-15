@@ -10,7 +10,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = {"grill-with-docs", "code-review", "setup-project", "delivery", "adhd-output", "unslop", "swarm", "swarmstack-help", "loose-ends", "swarmstack"}
+SKILLS = {"grill-with-docs", "code-review", "setup-project", "delivery", "adhd-output", "unslop", "swarm", "loose-ends", "swarmstack"}
 AUTHORITY = {"create_threads", "create_branches", "push_issue_branches", "open_prs", "merge_integration", "promote_production", "deploy"}
 
 
@@ -58,6 +58,9 @@ def validate(config):
     cost = budget["spend_limit_usd"]
     if type(cost) not in (int, float) or not math.isfinite(cost) or cost < 0 or type(budget["paid_overage"]) is not bool or not isinstance(budget["allowed_data"], str) or not budget["allowed_data"].strip():
         raise ValueError("invalid budget or data permission")
+    if isinstance(config["skills"], list):
+        # swarmstack-help was merged into the swarmstack router; accept the old name.
+        config["skills"] = list(dict.fromkeys("swarmstack" if s == "swarmstack-help" else s for s in config["skills"]))
     if not isinstance(config["skills"], list) or not config["skills"] or len(set(config["skills"])) != len(config["skills"]) or not set(config["skills"]) <= SKILLS:
         raise ValueError("select known unique skills")
     if not {"grill-with-docs", "code-review", "setup-project", "delivery", "adhd-output", "unslop"} <= set(config["skills"]):

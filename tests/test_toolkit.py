@@ -63,7 +63,7 @@ class Adoption(unittest.TestCase):
         self.assertEqual(json.loads((self.target / ".swarmstack/project.json").read_text()), config())
 
     def test_legacy_six_skill_setup_has_no_dangling_swarm_instructions(self):
-        legacy = config(); legacy["skills"].remove("swarm"); legacy["skills"].remove("swarmstack-help"); legacy.pop("swarm")
+        legacy = config(); legacy["skills"].remove("swarm"); legacy["skills"].remove("swarmstack"); legacy.pop("swarm")
         result = self.invoke(legacy, "--apply")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(checks.link_errors(self.target), [])
@@ -71,7 +71,7 @@ class Adoption(unittest.TestCase):
         self.assertFalse((self.target / ".swarmstack/scripts/swarm.py").exists())
 
     def test_previous_seven_skill_setup_and_help_only_adoption(self):
-        for omit in ["swarmstack-help", "swarm"]:
+        for omit in ["swarmstack", "swarm"]:
             with self.subTest(omit=omit), tempfile.TemporaryDirectory() as directory:
                 target = Path(directory).resolve()
                 c = config(); c["skills"].remove(omit)
@@ -82,8 +82,8 @@ class Adoption(unittest.TestCase):
                 if omit == "swarm":
                     self.assertFalse((target / ".swarmstack/scripts/swarm.py").exists())
                     for name in ["SKILL.md", "references/help.md"]:
-                        self.assertEqual((target / ".agents/skills/swarmstack-help" / name).read_bytes(),
-                                         (ROOT / "skills/swarmstack-help" / name).read_bytes())
+                        self.assertEqual((target / ".agents/skills/swarmstack" / name).read_bytes(),
+                                         (ROOT / "skills/swarmstack" / name).read_bytes())
                     self.assertEqual((target / ".swarmstack/licenses/pstack.txt").read_bytes(),
                                      (ROOT / "licenses/pstack.txt").read_bytes())
 

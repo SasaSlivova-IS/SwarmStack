@@ -19,7 +19,7 @@ The customised procedures live in each skill's references/procedure.md. They are
 
 ## Lauren Tan
 
-[Lauren Tan / poteto](https://github.com/poteto) authored pstack’s [poteto-help](https://github.com/cursor/plugins/blob/e5136d82418d2db3165ea1050d17577cd618cc05/pstack/skills/poteto-help/SKILL.md). Our [swarmstack-help](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/skills/swarmstack-help/SKILL.md) adapts its read-only question routing, source-backed answers and suggested-prompt format to SwarmStack’s actual workflows. Cursor-specific setup, modes and unavailable skills are omitted. [Retained MIT notice](licenses/pstack.txt).
+[Lauren Tan / poteto](https://github.com/poteto) authored pstack’s [poteto-help](https://github.com/cursor/plugins/blob/e5136d82418d2db3165ea1050d17577cd618cc05/pstack/skills/poteto-help/SKILL.md). Our [`/swarmstack help`](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/skills/swarmstack/SKILL.md) adapts its read-only question routing, source-backed answers and suggested-prompt format to SwarmStack’s actual workflows. Cursor-specific setup, modes and unavailable skills are omitted. [Retained MIT notice](licenses/pstack.txt).
 
 ## Conceptual references
 

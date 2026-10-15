@@ -42,11 +42,11 @@
       "author": "Ayoub Ghriss"
     },
     {
-      "skill": "swarmstack-help",
+      "skill": "swarmstack",
       "author": "Lauren Tan",
       "upstream": "https://github.com/cursor/plugins/blob/e5136d82418d2db3165ea1050d17577cd618cc05/pstack/skills/poteto-help/SKILL.md",
       "revision": "e5136d82418d2db3165ea1050d17577cd618cc05",
-      "changes": "Adapted read-only help routing and suggested prompts to SwarmStack; omitted Cursor modes/setup and unavailable skills. No verbatim procedure snapshot.",
+      "changes": "Adapted read-only help routing and suggested prompts to SwarmStack; omitted Cursor modes/setup and unavailable skills. No verbatim procedure snapshot. Merged into the /swarmstack router as its help mode on 15 October 2026.",
       "license_path": "licenses/pstack.txt",
       "license_sha256": "bc957ca6bee02792566a1a028d105e02e247c6e77cf057061674273da77b200e"
     }

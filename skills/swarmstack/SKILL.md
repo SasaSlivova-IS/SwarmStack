@@ -1,6 +1,6 @@
 ---
 name: swarmstack
-description: "Entry point for SwarmStack itself. \"/swarmstack setup\" sets SwarmStack up in a project after inspecting it and interviewing the owner; \"/swarmstack help <question>\" answers questions about SwarmStack. Use for /swarmstack commands."
+description: "Entry point for SwarmStack itself. \"/swarmstack setup\" sets SwarmStack up in a project after inspecting it and interviewing the owner; \"/swarmstack help <question>\" answers questions about SwarmStack setup, skills and swarm commands without dispatching work."
 disable-model-invocation: true
 ---
 
@@ -9,8 +9,14 @@ disable-model-invocation: true
 Route the first word after `/swarmstack`:
 
 - **setup:** set SwarmStack up in the current project, or in the project the user names. Follow [setup-project](../setup-project/SKILL.md) completely: inspect first, interview with grill-with-docs, preview, and install only after the user confirms.
-- **help:** follow the `swarmstack-help` skill with the rest of the message as the question. If that skill is not installed, say so and point to the README instead.
+- **help:** answer the rest of the message as a question, as described below.
 - Nothing or anything else: list these commands in two lines and ask which one is meant.
+
+## Help
+
+Load [the help procedure and source map](references/help.md). Read only the owning documentation the question needs. Answer first, offer at most one suggested prompt or command, and link the source you actually read. Suggestions are text, not permission to run them.
+
+Help is read-only: do not dispatch agents, message the orchestrator, run commands, change cooldown state or start another skill's workflow to explain it. An explicit request to do work leaves help mode and needs the normal workflow and existing grants; if intent is unclear, ask one short question first.
 
 ## Finding the toolkit
 

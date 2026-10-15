@@ -1,0 +1,38 @@
+{
+  "base": "e5fbf60a530136e0a7f3d224aca5bb9f8278ad80",
+  "initial_candidate": "ce3940992776a4eb90ce5d1c4a9428a9f8bb7122",
+  "scope": "Independent read-only Source review, not live host or native platform acceptance",
+  "initial_reports": {
+    "standards": {
+      "verdict": "PASS",
+      "critical": 0,
+      "important": 0,
+      "minor": 0,
+      "report": "Reviewed the pinned diff/log against AGENTS.md, docs/design.md, CONTEXT.md and the review procedure. Availability uses the existing standard-library SQLite gate without dispatch or monitoring. The entrypoint stays concise and the availability procedure is late-loaded. Public wording has no private-project names, paths or identifiers. Requested/delivered/applied state and priority/cooldown/pause/authority boundaries are preserved. Recursive installation includes the new reference; older installs need a reviewed update. No baseline smell warrants a finding. No tests or mutations performed."
+    },
+    "spec": {
+      "verdict": "PASS",
+      "critical": 0,
+      "important": 0,
+      "minor": 0,
+      "report": "The source persists requests independently of applied availability, coalesces repeats, retains uncertainty and prevents stale receipts replacing the latest applied mode. Direction/cooldown/pause remain separate. The procedure covers night checkpoint, routed questions, independent authorised work, auto-resume checks, day availability and restart reconciliation. The morning brief cannot switch modes or dispatch. Existing installs need a reviewed update. Added tests address meaningful local state transitions; reported execution is supplied evidence, not independently reproduced. Host/native platform checks remain unverified. No tests or mutations performed."
+    },
+    "security": {
+      "verdict": "CHANGES REQUIRED",
+      "critical": 0,
+      "important": 1,
+      "minor": 0,
+      "finding": {
+        "severity": "Important",
+        "location": "skills/swarm/references/availability.md:21",
+        "rule": "Day/night only declares availability and checks existing authorised auto-resume.",
+        "trigger": "A thread has disabled auto-resume and prior general authorisation for that behaviour. The initial enabling instruction permits Root to toggle it during the night handoff.",
+        "consequence": "Future execution behaviour changes instead of only checking the existing arrangement.",
+        "requested_correction": "Replace enabling with inspection/reporting only; settings changes require separate authorisation outside this command."
+      },
+      "report": "Otherwise, the source preserves pause/direction/cooldown, requires delivery before application, guards latest mode and retains uncertain delivery without another relay. The diff contains no private-project identifiers or new account/provider operations. No tests, imports, live accounts or host actions performed."
+    }
+  },
+  "author_response": "Accepted. The night procedure now explicitly says day/night never toggles a setting. Missing setup is separately authorised outside the command. No helper execution behavior changed.",
+  "correction_review": "PENDING"
+}

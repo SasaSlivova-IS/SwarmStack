@@ -15,3 +15,7 @@ Two isolated fault controls failed as intended: the old helper lacks day/night s
 No live agent, goal, provider, account, timer or auto-resume setting was changed during these checks. Native Windows/Linux execution and host slash-command discovery were not tested. SQLite persistence is not evidence of host delivery or application. Root must check the latest intent before applying it and record actual receipts. Host continuation and native auto-resume require supported host controls and existing project authority.
 
 Projects pinned to an earlier toolkit revision need a reviewed `/swarmstack update`; publishing the toolkit does not silently replace their installed files or activate a mode.
+
+## Independent review
+
+The initial Standards and Spec reviews passed with no findings. Security identified one Important instruction mismatch: the night handoff could enable an auto-resume setting while checking it. The correction makes day/night inspection-only for those settings; any toggle requires a separate explicitly authorised setup action. The original finding remains retained in the [review record](reviews/day-night-reviews.json).

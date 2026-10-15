@@ -1,6 +1,6 @@
 # Set up a project
 
-Type `/swarmstack setup` in your project, or ask your agent: "Read this SwarmStack checkout and run skills/setup-project/SKILL.md against my project. Interview me before installing anything."
+Type `/swarmstack setup` in your project, or ask your agent: "Read this SwarmStack checkout and follow skills/swarmstack/references/setup.md against my project. Interview me before installing anything."
 
 ## 1. Inspect first
 

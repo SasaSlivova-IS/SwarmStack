@@ -2,6 +2,8 @@
 
 Terms the guides use without explaining them.
 
+See [command language](../CONTEXT.md) for swarm controls, project commands and standalone skills.
+
 ## People and threads
 
 **Root.** The single orchestrator thread, shown in purple. It chooses which issues run, assigns leads, picks models, reviews submissions and merges finished work. It doesn't implement issues itself.

@@ -63,7 +63,7 @@ class Adoption(unittest.TestCase):
         self.assertEqual(json.loads((self.target / ".swarmstack/project.json").read_text()), config())
 
     def test_legacy_six_skill_setup_has_no_dangling_swarm_instructions(self):
-        legacy = config(); legacy["skills"].remove("swarm"); legacy["skills"].remove("swarmstack"); legacy.pop("swarm")
+        legacy = config(); legacy["skills"] = ["grill-with-docs", "code-review", "setup-project", "delivery", "adhd-output", "unslop"]; legacy.pop("swarm")
         result = self.invoke(legacy, "--apply")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(checks.link_errors(self.target), [])
@@ -75,10 +75,14 @@ class Adoption(unittest.TestCase):
             with self.subTest(omit=omit), tempfile.TemporaryDirectory() as directory:
                 target = Path(directory).resolve()
                 c = config(); c["skills"].remove(omit)
+                if omit == "swarmstack":
+                    c["skills"].append("setup-project")
                 _, outputs = bootstrap.build_plan(target, c)
                 bootstrap.apply_plan(target, outputs)
                 self.assertEqual(checks.link_errors(target), [])
-                self.assertFalse((target / ".agents/skills" / omit).exists())
+                if omit == "swarm":
+                    self.assertFalse((target / ".agents/skills/swarm").exists())
+                self.assertFalse((target / ".agents/skills/setup-project").exists())
                 if omit == "swarm":
                     self.assertFalse((target / ".swarmstack/scripts/swarm.py").exists())
                     for name in ["SKILL.md", "references/help.md"]:
@@ -86,6 +90,31 @@ class Adoption(unittest.TestCase):
                                          (ROOT / "skills/swarmstack" / name).read_bytes())
                     self.assertEqual((target / ".swarmstack/licenses/pstack.txt").read_bytes(),
                                      (ROOT / "licenses/pstack.txt").read_bytes())
+
+    def test_old_setup_and_help_names_install_one_project_router_without_mutating_input(self):
+        for names in [["setup-project"], ["swarmstack-help"], ["setup-project", "swarmstack-help", "swarmstack"]]:
+            with self.subTest(names=names), tempfile.TemporaryDirectory() as directory:
+                target = Path(directory).resolve()
+                c = config(); c["skills"].remove("swarmstack"); c["skills"].extend(names)
+                original = copy.deepcopy(c)
+                _, outputs = bootstrap.build_plan(target, c)
+                self.assertEqual(c, original)
+                bootstrap.apply_plan(target, outputs)
+                selected = json.loads((target / ".swarmstack/project.json").read_text())["skills"]
+                self.assertEqual(selected.count("swarmstack"), 1)
+                self.assertNotIn("setup-project", selected)
+                self.assertNotIn("swarmstack-help", selected)
+                self.assertFalse((target / ".agents/skills/setup-project").exists())
+                self.assertFalse((target / ".agents/skills/swarmstack-help").exists())
+                self.assertTrue((target / ".agents/skills/swarmstack/references/setup.md").is_file())
+                self.assertEqual(checks.link_errors(target), [])
+
+    def test_duplicate_or_invalid_skill_entries_refuse_before_writes(self):
+        for entry in ["swarmstack", "unknown", {"name": "swarmstack"}]:
+            c = config(); c["skills"].append(entry)
+            result = self.invoke(c, "--apply")
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(list(self.target.iterdir()), [])
 
     def test_attribution_is_central_and_distributed_without_skill_notices(self):
         result = self.invoke(config(), "--apply")

@@ -57,3 +57,7 @@ Keep upstream origins and local changes. Extend existing owners before adding ov
 ## Core command interface
 
 The user-facing swarm skill exposes intent-level controls backed by a standalone local SQLite gate. Root still owns execution. Five-hour direction windows, cache reads, idempotent transport keys, explicit receipts and pending priorities reduce repeated messages without adding another orchestration service. See the [contract](../skills/swarm/references/commands.md).
+
+## Command ownership
+
+[Command language](../CONTEXT.md) separates /swarm team controls, /swarmstack project commands and independent skills. The project router loads only the selected setup or help reference. Legacy setup-project and swarmstack-help configuration entries map to swarmstack for fresh adoption; installed snapshots require a reviewed migration.

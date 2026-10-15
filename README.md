@@ -28,7 +28,7 @@ Type these in your user-facing chat:
 | `/swarm pause` | Stop starting new work right away. Running work is saved at a safe point. |
 | `/swarm resume` | Continue the same goal from where it paused. |
 
-Changes of direction (the first four rows) are limited to one every five hours, so the swarm isn't pulled back and forth. Pause and resume ignore that limit.
+Changes of direction (backend, frontend, issue link and auto) are limited to one every five hours, so the swarm isn't pulled back and forth. Pause and resume ignore that limit.
 
 A small Python script keeps track of these commands in a local SQLite file, so the limit survives chat restarts. It doesn't send messages or run as a service. Before relying on it, read the [command contract](skills/swarm/references/commands.md) and [what has been verified](docs/swarm-verification.md).
 
@@ -36,9 +36,11 @@ Lost track? `/loose-ends cover` goes back through the current conversation and l
 
 Not sure what to ask? `/swarmstack help <question>` answers from the documentation, suggests one prompt and links the source. It doesn't start work or message the orchestrator. Your chat tool must be able to find the skill first; check that during setup.
 
+The command split is simple: `/swarm` controls the running team; `/swarmstack` manages the project through setup and help. Standalone skills such as `/grill-with-docs` stay separate. Each project command loads its own procedure.
+
 ## Add it to a project
 
-Type `/swarmstack setup` in the project, or ask an agent to read [SETUP.md](SETUP.md) and run the [setup-project](skills/setup-project/SKILL.md) skill. It reads your project, asks about anything it can't work out, and shows you a configuration to approve before installing anything.
+Type `/swarmstack setup` in the project, or ask an agent to read [SETUP.md](SETUP.md) and follow the [project setup procedure](skills/swarmstack/references/setup.md). It reads your project, asks about anything it can't work out, and shows you a configuration to approve before installing anything.
 
 ```sh
 python3 scripts/bootstrap.py --target /path/to/project --config /path/to/confirmed-project.json

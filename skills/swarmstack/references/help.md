@@ -13,7 +13,7 @@ Resolve local paths from the toolkit root. In an adopted project, guides and SET
 | Question | Owning source |
 | --- | --- |
 | What exists? | [README.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/README.md) |
-| Setup, permissions, existing-file refusal | [SETUP.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/SETUP.md), then skills/setup-project/SKILL.md if needed |
+| Setup, permissions, existing-file refusal | [SETUP.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/SETUP.md), then skills/swarmstack/references/setup.md if needed |
 | Direction, issue links, cooldown, queue/steer, receipts | [skills/swarm/references/commands.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/skills/swarm/references/commands.md) |
 | What is actually tested or still unverified? | [docs/swarm-verification.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/docs/swarm-verification.md), and the installed project's own evidence |
 | Root, issue leads, naming, integration | [guides/orchestrator.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/guides/orchestrator.md), guides/lead.md |

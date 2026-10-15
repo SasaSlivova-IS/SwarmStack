@@ -10,7 +10,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = {"grill-with-docs", "code-review", "setup-project", "delivery", "adhd-output", "unslop"}
+SKILLS = {"grill-with-docs", "code-review", "setup-project", "delivery", "adhd-output", "unslop", "swarm"}
 AUTHORITY = {"create_threads", "create_branches", "push_issue_branches", "open_prs", "merge_integration", "promote_production", "deploy"}
 
 
@@ -31,7 +31,7 @@ def local_path(value):
 
 def validate(config):
     required = {"schema_version", "status", "name", "goal", "success", "github_repository", "primary_branch", "integration_branch", "requirements_path", "glossary_path", "test_environment", "commands", "models", "budget", "authority", "human_ux_acceptance_required", "skills"}
-    if set(config) != required or config.get("schema_version") != 1 or config.get("status") != "confirmed":
+    if not required <= set(config) or set(config) - required - {"swarm"} or config.get("schema_version") != 1 or config.get("status") != "confirmed":
         raise ValueError("use the exact v1 configuration and confirm setup first")
     for field in ["name", "goal", "success", "github_repository", "primary_branch", "integration_branch", "test_environment"]:
         value = config[field]
@@ -61,7 +61,7 @@ def validate(config):
     if not isinstance(config["skills"], list) or not config["skills"] or len(set(config["skills"])) != len(config["skills"]) or not set(config["skills"]) <= SKILLS:
         raise ValueError("select known unique skills")
     if not {"grill-with-docs", "code-review", "setup-project", "delivery", "adhd-output", "unslop"} <= set(config["skills"]):
-        raise ValueError("v1 installs the six linked core skills; optional profiles are not implemented")
+        raise ValueError("the six original linked skills remain required; new setups also select swarm")
     if set(config["models"]) != {"frontend", "backend", "review"}:
         raise ValueError("select frontend/backend/review models from the live host")
     for model in config["models"].values():
@@ -95,6 +95,22 @@ def build_plan(target, config):
     add(".swarmstack/SETUP.md", setup)
     add(".swarmstack/templates/project.example.json", (ROOT / "templates/project.example.json").read_bytes())
     add(".swarmstack/scripts/model_frontier.py", (ROOT / "scripts/model_frontier.py").read_bytes())
+    if "swarm" in config["skills"]:
+        from importlib.util import module_from_spec, spec_from_file_location
+        spec = spec_from_file_location("swarm_gate", ROOT / "scripts/swarm.py")
+        module = module_from_spec(spec)
+        spec.loader.exec_module(module)
+        options = config.get("swarm", {})
+        if set(options) != {"host", "orchestrator", "direction_cooldown_seconds", "status_ttl_seconds"}:
+            raise ValueError("confirm swarm host/orchestrator/cooldowns during setup")
+        if options["host"] not in {"t3", "codex", "claude", "manual"} or not isinstance(options["orchestrator"], str) or not options["orchestrator"].strip():
+            raise ValueError("confirm an actual orchestrator binding")
+        if type(options["direction_cooldown_seconds"]) is not int or options["direction_cooldown_seconds"] < module.MIN_COOLDOWN or options["direction_cooldown_seconds"] > 31536000:
+            raise ValueError("direction cooldown must be at least five hours")
+        if type(options["status_ttl_seconds"]) is not int or not 0 <= options["status_ttl_seconds"] <= 3600:
+            raise ValueError("invalid report cache TTL")
+        add(".swarmstack/scripts/swarm.py", (ROOT / "scripts/swarm.py").read_bytes())
+        add(".swarmstack/local/.gitignore", "*\n!.gitignore\n")
     for src in sorted((ROOT / ".github/ISSUE_TEMPLATE").glob("*.yml")):
         add(".github/ISSUE_TEMPLATE/" + src.name, src.read_bytes())
     add(".github/pull_request_template.md", (ROOT / ".github/pull_request_template.md").read_bytes())
@@ -104,7 +120,7 @@ def build_plan(target, config):
                 continue
             body = src.read_text()
             if src.name == "SKILL.md":
-                body = body.replace("../../SETUP.md", "../../../.swarmstack/SETUP.md").replace("../../guides/", "../../../.swarmstack/guides/")
+                body = body.replace("../../SETUP.md", "../../../.swarmstack/SETUP.md").replace("../../guides/", "../../../.swarmstack/guides/").replace("../../scripts/", "../../../.swarmstack/scripts/")
             add(".agents/skills/" + name + "/" + src.relative_to(ROOT / "skills" / name).as_posix(), body)
     for src in sorted((ROOT / "licenses").glob("*.txt")):
         add(".swarmstack/licenses/" + src.name, src.read_bytes())

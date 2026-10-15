@@ -8,11 +8,18 @@ Built with customised skills originating from [Matt Pocock](https://github.com/m
 
 ## Included
 
-1. One orchestrator, dedicated issue leads, coloured threads and isolated workspaces.
-2. Model-and-effort routing using Artificial Analysis, measured task cost and a Pareto frontier.
-3. Your customised grill-with-docs and code-review skills, plus focused setup, delivery and communication recipes.
-4. Problem-first [PR](.github/pull_request_template.md), [bug](.github/ISSUE_TEMPLATE/bug.yml) and [feature](.github/ISSUE_TEMPLATE/feature.yml) formats.
-5. An interactive setup guide and preview-first installer that refuses existing files.
+1. A core [swarm command skill](skills/swarm/SKILL.md) with a standalone, restart-persistent cooldown gate.
+2. One orchestrator, dedicated issue leads, coloured threads and isolated workspaces.
+3. Model-and-effort routing using Artificial Analysis, measured task cost and a Pareto frontier.
+4. Your customised grill-with-docs and code-review skills, plus focused setup, delivery and communication recipes.
+5. Problem-first [PR](.github/pull_request_template.md), [bug](.github/ISSUE_TEMPLATE/bug.yml) and [feature](.github/ISSUE_TEMPLATE/feature.yml) formats.
+6. An interactive setup guide and preview-first installer that refuses existing files.
+
+## Command the swarm
+
+`/swarm backend`, `/swarm frontend`, `/swarm <issue-link>` and `/swarm auto` set direction. `/swarm status` and `/swarm blockers` read progress. `/swarm pause` and `/swarm resume` control the same goal. Directions share a minimum five-hour window; pause never waits for it.
+
+The helper is an ordinary Python process using local SQLite, independent of the chat host. It does not send messages or keep a service running. Read the [command and receipt contract](skills/swarm/references/commands.md) and [verification limits](docs/swarm-verification.md) before adopting it.
 
 ## Adopt in another project
 

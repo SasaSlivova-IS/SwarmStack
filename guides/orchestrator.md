@@ -20,6 +20,8 @@ Inspect actual leads/children/queues once at coordination boundaries. Dispatch i
 
 Give complete scope, Done criteria, source base, owning requirements, allowed effects, model/effort and role guide. Children get bounded assignments, not the whole swarm prompt. Do not turn milestone slices into whole-issue claims.
 
+At normal coordination checkpoints, use the [swarm command contract](../skills/swarm/references/commands.md) to reconcile offered/delivered requests, record actual application and check the latest eligible pending direction. Do not infer application from a send receipt or wake the LLM just for cooldown expiry. Respect the current pause intent.
+
 Read a finite queue batch at a safe boundary. Reconcile old grants/pins and preserve unresolved questions for current owners. Never bulk replay stale instructions into a released thread. Use supported promotion only if available; no forced restart, invented wake guarantee or quota retry loop.
 
 ## Review, integration and closure

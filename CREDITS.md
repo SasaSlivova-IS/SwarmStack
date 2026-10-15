@@ -23,6 +23,6 @@ The imported code-review workflow's smell baseline uses the vocabulary of Martin
 
 ## Original and future work
 
-The setup installer, offline Pareto helper, project templates and standalone setup/delivery/editing recipes were authored for SwarmStack. Shared ideas do not imply that their creators endorsed this toolkit.
+The standalone swarm command gate, setup installer, offline Pareto helper, project templates and setup/delivery/editing recipes were authored for SwarmStack. Shared ideas do not imply that their creators endorsed this toolkit.
 
 When adapting another source, add the author, exact source, licence and modifications before publication. Keep [THIRD_PARTY.md](THIRD_PARTY.md), [provenance.json](provenance.json) and distributed skill notices consistent. Do not include private-project examples, names or identifying context in attribution.

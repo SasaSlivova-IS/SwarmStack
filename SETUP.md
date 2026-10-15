@@ -18,7 +18,7 @@ Use [grill-with-docs](skills/grill-with-docs/references/procedure.md): explanati
 | Workflow | Primary/integration branches, issue branches/worktrees, review/merge/closure rules. |
 | Authority | Thread/branch creation, pushing, PRs, integration, promotion, deployment and real-data limits. |
 | Models | Live host catalogue, chosen role models/efforts, subscriptions, data restrictions and budget. |
-| Communication | Green channels, brevity, decision batching and escalation. |
+| Communication | Green channels, brevity, decision batching, escalation, actual Root/host binding and swarm cooldowns. |
 
 ### Example question, not an accepted default
 
@@ -41,6 +41,8 @@ Continue independent inspection while waiting. Ask about actual ambiguity, autho
 Fill [project.example.json](templates/project.example.json). Keep status draft until the user accepts the concrete configuration, then set confirmed. Sensitive values belong in a secret manager, never this file. Verify the selected models/efforts exist in the host; a configuration string is not compatibility proof.
 
 Agree the actual requirements/glossary paths, runtime commands and existing guidance to preserve. Missing discovery blocks affected work. A blank starter file does not settle requirements.
+
+For the core swarm skill, confirm the actual host and orchestrator identity, at least five hours between routine applied directions and a short status cache TTL. Pausing remains immediate; these controls grant no extra effects.
 
 Show outcome, workflow, models/budget, verification and effects in one short review. Record answers in the project's decisions record. Unresolved decisions remain pending; they are not permission to start dependent work.
 

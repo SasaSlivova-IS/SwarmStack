@@ -54,6 +54,13 @@
     "setup-project",
     "delivery",
     "adhd-output",
-    "unslop"
-  ]
+    "unslop",
+    "swarm"
+  ],
+  "swarm": {
+    "host": "manual",
+    "orchestrator": null,
+    "direction_cooldown_seconds": 18000,
+    "status_ttl_seconds": 60
+  }
 }

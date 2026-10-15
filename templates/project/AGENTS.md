@@ -12,4 +12,6 @@ Continue complete authorised outcomes through checks, review and corrections. A 
 
 Read [models](.swarmstack/guides/models.md) only for intake/delegation and [review](.swarmstack/guides/review.md) at submission. Keep temporary limits in the task and requirements/terminology in their owning project files.
 
+Use [swarm](.agents/skills/swarm/SKILL.md) only for user-facing commands and normal pending-command checkpoints; it grants no new effects.
+
 Current state: [.swarmstack/state.md](.swarmstack/state.md). Accepted setup: [.swarmstack/decisions.md](.swarmstack/decisions.md). Issue workflow: [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md).

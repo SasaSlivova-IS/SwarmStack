@@ -26,6 +26,7 @@ def config():
     c = json.loads((ROOT / "templates/project.example.json").read_text())
     c.update(status="confirmed", name="Pilot", goal="Make a checkable tool", success="A user sees the intended output", github_repository="example/pilot", test_environment="Disposable temporary fixture")
     c["commands"]["test"] = "python3 -m unittest"
+    c["swarm"].update(host="manual", orchestrator="fixture-root")
     for m in c["models"].values():
         m.update(provider="fixture-provider", model="fixture-model", effort="medium")
     return c

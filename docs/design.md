@@ -53,3 +53,7 @@ Green 1 is the user's own workspace; agents do not message it. Green 2 batches r
 No model name, subscription price or platform is a permanent universal default. Discovery should expose skill name/description, invocation loads SKILL.md, and relevant recipes load on demand. Host behavior varies and needs an adoption check. Submission/retrospective recipes load only at those boundaries.
 
 Keep upstream origins and local changes. Extend existing owners before adding overlapping skills. Use avoided rework, elapsed time and context cost to decide value; do not build a metrics service just to optimise prompts.
+
+## Core command interface
+
+The user-facing swarm skill exposes intent-level controls backed by a standalone local SQLite gate. Root still owns execution. Five-hour direction windows, cache reads, idempotent transport keys, explicit receipts and pending priorities reduce repeated messages without adding another orchestration service. See the [contract](../skills/swarm/references/commands.md).

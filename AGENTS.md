@@ -8,4 +8,6 @@ Keep scripts standard-library only and preview-first. Bootstrap must not execute
 
 Before initial delivery or material workflow changes, use [code-review](skills/code-review/SKILL.md) for independent Standards and Spec review, plus Security when installation/authority/data boundaries change. Reviewers are read-only; the implementer owns fixes. Review grants no publication, spending or deployment authority.
 
+SwarmStack is kept in two-way sync with the private project it was distilled from. Improvements proven there are generalised and brought here; improvements made here are adapted back there by that project's own agents. Bring the rule and its reason, never the private project's names, people, data, paths, identifiers or temporary situations. When a guide here and its counterpart there differ, decide which version is better and update the other, rather than letting them drift.
+
 Preserve upstream notices and record adaptations. Keep evidence compact; no raw session dumps, caches or recursively copied inventories. Use concise concrete English.

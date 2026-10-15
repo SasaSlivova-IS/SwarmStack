@@ -109,6 +109,8 @@ def build_plan(target, config):
     for src in sorted((ROOT / "licenses").glob("*.txt")):
         add(".swarmstack/licenses/" + src.name, src.read_bytes())
     add(".swarmstack/LICENSE", (ROOT / "LICENSE").read_bytes())
+    add(".swarmstack/CREDITS.md", (ROOT / "CREDITS.md").read_text().replace("](skills/", "](../.agents/skills/"))
+    add(".swarmstack/provenance.json", (ROOT / "provenance.json").read_bytes())
     add(".swarmstack/THIRD_PARTY.md", (ROOT / "THIRD_PARTY.md").read_text().replace("skills/*/", "../.agents/skills/*/"))
     lock = {"toolkit": "SwarmStack", **snapshot(), "files": {name: hashlib.sha256(data).hexdigest() for name, data in outputs.items()}}
     add(".swarmstack/lock.json", json.dumps(lock, indent=2) + "\n")

@@ -2,6 +2,8 @@
 
 Reusable guidance for an agent swarm that finishes issues, verifies its work and keeps the human out of routine coordination.
 
+Built with customised skills originating from [Matt Pocock](https://github.com/mattpocock/skills) and communication guidance adapted from [Ayoub Ghriss](https://github.com/ayghri/i-have-adhd). See [Credits](CREDITS.md) for sources, modifications and retained licences.
+
 **Start:** [project setup](SETUP.md). **Review:** [design](docs/design.md), [orchestrator](guides/orchestrator.md), [first-version review](docs/review.md).
 
 ## Included

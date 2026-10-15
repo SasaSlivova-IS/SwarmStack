@@ -6,7 +6,9 @@
       "upstream": "https://github.com/mattpocock/skills",
       "snapshot": "references/procedure.md",
       "sha256": "22d80f0653c6116d33e7002b8db33eb16739b22d84d56e2bf4c531e363767499",
-      "changes": "Preserved procedure bytes; short entrypoint and portability notes added."
+      "changes": "Preserved procedure bytes; short entrypoint and portability notes added.",
+      "author": "Matt Pocock",
+      "source_skill": "https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review"
     },
     {
       "skill": "grill-with-docs",
@@ -14,7 +16,9 @@
       "upstream": "https://github.com/mattpocock/skills",
       "snapshot": "references/procedure.md",
       "sha256": "a87de7997de3ddf45d1d02e925c32d8fa275b318f3e6e86abb28949a945c28ea",
-      "changes": "Preserved procedure bytes; short entrypoint and portability notes added."
+      "changes": "Preserved procedure bytes; short entrypoint and portability notes added.",
+      "author": "Matt Pocock",
+      "source_skill": "https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs"
     },
     {
       "source": "mattpocock/skills",
@@ -32,7 +36,8 @@
       "skill": "adhd-output",
       "upstream": "https://github.com/ayghri/i-have-adhd/blob/1ecea1993b7fce257ffbd686c070948b5e07eda6/skills/i-have-adhd/SKILL.md",
       "upstream_sha256": "88955c019bbb1419ff4b49dbb1f80a867467de6233d7865af2e06a7d7b76c7d3",
-      "changes": "Condensed adaptation; no forced estimates, repeated plan narration or unnecessary user tasks; no automatic session toggle."
+      "changes": "Condensed adaptation; no forced estimates, repeated plan narration or unnecessary user tasks; no automatic session toggle.",
+      "author": "Ayoub Ghriss"
     }
   ]
 }

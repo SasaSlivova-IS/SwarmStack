@@ -23,7 +23,6 @@ Resolve local paths from the toolkit root. In an adopted project, guides and SET
 | Model/effort selection and benchmark limits | [guides/models.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/guides/models.md) |
 | Concise communication | [skills/adhd-output/SKILL.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/skills/adhd-output/SKILL.md), skills/unslop/SKILL.md |
 | PR and issue format | [.github/pull_request_template.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/.github/pull_request_template.md), .github/ISSUE_TEMPLATE/ |
-| Who wrote the skills? | [CREDITS.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/CREDITS.md) |
 
 Follow a mapped entrypoint's references only when needed to answer. Source overrides this map. If a source is missing or unreadable, state that limit rather than invent its rules. Do not read credentials, private runtime state, whole chat histories or unrelated project files to answer a general question.
 
@@ -34,7 +33,7 @@ Follow a mapped entrypoint's references only when needed to answer. Source overr
 - A skill in this repository is not necessarily installed or discoverable as a slash command in the user's host. Check the selected skills and host support only if that affects the answer. Missing discovery needs adoption, not a guessed command or global configuration edit.
 - The helper can explain commands while Root is busy. It does not bypass a hold or cooldown, relay a new priority, or report fresh project status without current evidence.
 - Source review, tests, native/platform checks and human acceptance establish different claims. Use the verification source for current platform limits; do not promise universal compatibility from documentation.
-- Only suggest actual SwarmStack workflows. Pstack's Cursor modes, loops and other skills are not supplied by this adaptation.
+- Only suggest actual SwarmStack workflows. Do not suggest unavailable host modes, loops or other skills.
 
 ## Reply shape
 

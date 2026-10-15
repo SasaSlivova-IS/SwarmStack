@@ -6,4 +6,4 @@ disable-model-invocation: true
 
 # Unslop
 
-Remove inflated claims, vague attribution, needless transitions, repeated summaries and decorative structure. Prefer active voice, concrete mechanisms and familiar words. Keep sentences short enough to follow. Preserve uncertainty that affects correctness. Cut ceremony before cutting evidence. Do not turn brevity into missing requirements or claim unperformed work passed. This is a compact original SwarmStack editing recipe, not a verbatim import of another unslop implementation.
+Remove inflated claims, vague attribution, needless transitions, repeated summaries and decorative structure. Prefer active voice, concrete mechanisms and familiar words. Keep sentences short enough to follow. Preserve uncertainty that affects correctness. Cut ceremony before cutting evidence. Do not turn brevity into missing requirements or claim unperformed work passed.

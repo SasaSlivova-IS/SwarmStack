@@ -36,7 +36,7 @@ Green 1 is the user's own workspace; agents do not message it. Green 2 batches r
 3. The operating map with explicit ownership, feedback, escalation and GitHub records.
 4. Your customised skills, admitted for demonstrated value rather than novelty.
 5. Short discovery metadata; task-triggered bodies and references, verified per host.
-6. Practical checks derived from Matt Pocock's mistake list, without a growing global prompt.
+6. Practical checks for common agent-workflow mistakes, without a growing global prompt.
 7. ADHD-friendly output adapted to the user's preferences and task.
 8. Portable core, host adapters, project configuration, versioned origins and compact evidence.
 

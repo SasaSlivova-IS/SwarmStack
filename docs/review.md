@@ -17,6 +17,6 @@ The installer creates project-local guidance only, refuses overwrites and runs n
 
 The Pareto tool is offline and has invented fixtures only. No current AA scores, live model evaluations, provider tests or spending are claimed. Host-specific skill discovery and UI behavior are documented adoption checks, not tested compatibility claims.
 
-The customised review/interview procedures are preserved verbatim, with short entrypoints and portability notes. First-version tests exercise local disposable projects, not the user's applications. An optional manual-dispatch CI template is provided under templates/github/check.yml; no workflow is installed or claimed green.
+At first-version delivery, the customised review/interview procedures were preserved verbatim, with short entrypoints and portability notes. The subsequent attribution relocation removes operational credits and replaces the review procedure’s unavailable setup command with confirmed tracker lookup. Original/current hashes remain in provenance.json. First-version tests exercise local disposable projects, not the user's applications. An optional manual-dispatch CI template is provided under templates/github/check.yml; no workflow is installed or claimed green.
 
 Independent review and actual check results are recorded in [review-results.md](review-results.md) after correction. No global/project rollout, paid integration, production merge or automatic update is included.

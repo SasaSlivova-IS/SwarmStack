@@ -81,11 +81,21 @@ class Adoption(unittest.TestCase):
                 self.assertFalse((target / ".agents/skills" / omit).exists())
                 if omit == "swarm":
                     self.assertFalse((target / ".swarmstack/scripts/swarm.py").exists())
-                    for name in ["SKILL.md", "references/help.md", "LICENSE.txt"]:
+                    for name in ["SKILL.md", "references/help.md"]:
                         self.assertEqual((target / ".agents/skills/swarmstack-help" / name).read_bytes(),
                                          (ROOT / "skills/swarmstack-help" / name).read_bytes())
                     self.assertEqual((target / ".swarmstack/licenses/pstack.txt").read_bytes(),
                                      (ROOT / "licenses/pstack.txt").read_bytes())
+
+    def test_attribution_is_central_and_distributed_without_skill_notices(self):
+        result = self.invoke(config(), "--apply")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        for name in ["matt-pocock.txt", "i-have-adhd.txt", "pstack.txt"]:
+            self.assertEqual((self.target / ".swarmstack/licenses" / name).read_bytes(),
+                             (ROOT / "licenses" / name).read_bytes())
+        for name in ["CREDITS.md", "THIRD_PARTY.md", "provenance.json"]:
+            self.assertTrue((self.target / ".swarmstack" / name).is_file())
+        self.assertFalse(list((self.target / ".agents/skills").rglob("LICENSE*")))
 
     def test_existing_agents_is_preserved_and_no_partial_setup(self):
         (self.target / "AGENTS.md").write_text("existing authority")

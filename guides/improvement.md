@@ -1,6 +1,6 @@
 # Improve the workflow
 
-Load for retrospectives, repeated failures or explicit optimisation, not every run. Use Matt Pocock's mistake list as diagnostic questions:
+Load for retrospectives, repeated failures or explicit optimisation, not every run. Use these diagnostic questions:
 
 - Effort/alignment: proportionate thinking, important ambiguity resolved, no human dispatch of routine steps.
 - Verification/review: meaningful faulty controls, independent original-claim proof, agent-observable outcomes, human time reserved for decisions/final UX.

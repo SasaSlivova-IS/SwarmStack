@@ -9,7 +9,9 @@ SwarmStack combines original tooling and guidance with adapted work by other aut
 - **grill-with-docs:** [original skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs), [our entrypoint](skills/grill-with-docs/SKILL.md). The customised procedure adds the explicit Explanation → Current state → Question → lettered-options format, stable IDs, checked previous answers and exact decision recording.
 - **code-review:** [original skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review), [our entrypoint](skills/code-review/SKILL.md). Our customised version keeps separate Standards/Spec reviews, adds a conditional Security specialist, severity labels, read-only reviewers and an evidence-based fix/rebuttal loop.
 
-The local customised procedures are preserved in each skill's references/procedure.md. They are adaptations, not claims to match current upstream verbatim. SwarmStack adds short entrypoints and portability notes. [Retained Matt Pocock MIT notice](licenses/matt-pocock.txt).
+The workflow-improvement checklist also draws on his list of common agent-workflow mistakes supplied during toolkit design.
+
+The customised procedures live in each skill's references/procedure.md. They are adaptations, not claims to match current upstream verbatim. Operational files omit attribution prose; code-review also replaces an unavailable setup command with project tracker lookup. Original and current procedure hashes are recorded in provenance.json. [Retained Matt Pocock MIT notice](licenses/matt-pocock.txt).
 
 ## Ayoub Ghriss
 
@@ -21,7 +23,7 @@ The local customised procedures are preserved in each skill's references/procedu
 
 ## Conceptual references
 
-The imported code-review workflow's smell baseline uses the vocabulary of Martin Fowler's [Refactoring](https://martinfowler.com/books/refactoring.html), as identified in its preserved procedure. This credit is for the underlying concepts, not a bundled copy of the book.
+The imported code-review workflow's smell baseline uses the vocabulary of Martin Fowler's [Refactoring](https://martinfowler.com/books/refactoring.html), as identified in the original customised procedure. This credit is for the underlying concepts, not a bundled copy of the book.
 
 [Artificial Analysis](https://artificialanalysis.ai/) is a referenced model-evaluation source. SwarmStack does not bundle live scores or claim authorship of its benchmarks.
 
@@ -29,4 +31,6 @@ The imported code-review workflow's smell baseline uses the vocabulary of Martin
 
 The standalone swarm command gate, setup installer, offline Pareto helper, project templates and setup/delivery/editing recipes were authored for SwarmStack. Shared ideas do not imply that their creators endorsed this toolkit.
 
-When adapting another source, add the author, exact source, licence and modifications before publication. Keep [THIRD_PARTY.md](THIRD_PARTY.md), [provenance.json](provenance.json) and distributed skill notices consistent. Do not include private-project examples, names or identifying context in attribution.
+When adapting another source, add the author, exact source, licence and modifications before publication. Keep [THIRD_PARTY.md](THIRD_PARTY.md), [provenance.json](provenance.json) and distributed central notices consistent. Do not include private-project examples, names or identifying context in attribution.
+
+Creator credits and legal notices live in this file, THIRD_PARTY.md, provenance.json and licenses/. They are not part of skill-loading instructions. Project adoption carries these records under .swarmstack/. Distribute those records with copied skills; do not redistribute a standalone imported skill without its applicable copyright and licence notice.

@@ -5,10 +5,11 @@
       "origin": "User-customised local Matt Pocock skill",
       "upstream": "https://github.com/mattpocock/skills",
       "snapshot": "references/procedure.md",
-      "sha256": "22d80f0653c6116d33e7002b8db33eb16739b22d84d56e2bf4c531e363767499",
-      "changes": "Preserved procedure bytes; short entrypoint and portability notes added.",
+      "sha256": "85313e26f3fcb5116e536a058680a5c5d0b6ef8b7c8a96dca7a49051dce8df94",
+      "changes": "Customised procedure retained with attribution moved to central records; short task-loaded entrypoint and portability notes. Review procedure also replaces an unavailable setup command with confirmed project tracker lookup.",
       "author": "Matt Pocock",
-      "source_skill": "https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review"
+      "source_skill": "https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review",
+      "original_customised_sha256": "22d80f0653c6116d33e7002b8db33eb16739b22d84d56e2bf4c531e363767499"
     },
     {
       "skill": "grill-with-docs",
@@ -16,9 +17,10 @@
       "upstream": "https://github.com/mattpocock/skills",
       "snapshot": "references/procedure.md",
       "sha256": "a87de7997de3ddf45d1d02e925c32d8fa275b318f3e6e86abb28949a945c28ea",
-      "changes": "Preserved procedure bytes; short entrypoint and portability notes added.",
+      "changes": "Customised question procedure unchanged; entrypoint attribution moved to central records.",
       "author": "Matt Pocock",
-      "source_skill": "https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs"
+      "source_skill": "https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs",
+      "original_customised_sha256": "a87de7997de3ddf45d1d02e925c32d8fa275b318f3e6e86abb28949a945c28ea"
     },
     {
       "source": "mattpocock/skills",

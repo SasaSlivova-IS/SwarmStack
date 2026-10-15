@@ -6,8 +6,6 @@ disable-model-invocation: true
 
 # SwarmStack help
 
-Adapted from [Lauren Tan's /poteto-help](https://github.com/cursor/plugins/blob/e5136d82418d2db3165ea1050d17577cd618cc05/pstack/skills/poteto-help/SKILL.md). [Retained MIT notice](LICENSE.txt).
-
 Load [the help procedure and source map](references/help.md) on invocation. Read only the owning documentation needed for the question.
 
 Answer first, offer at most one suggested prompt or command, and link the source you actually read. Suggestions are text, not permission to execute them.

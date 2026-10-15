@@ -57,7 +57,8 @@
     "unslop",
     "swarm",
     "swarmstack-help",
-    "loose-ends"
+    "loose-ends",
+    "swarmstack"
   ],
   "swarm": {
     "host": "manual",

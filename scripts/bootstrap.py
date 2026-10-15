@@ -10,7 +10,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = {"grill-with-docs", "code-review", "setup-project", "delivery", "adhd-output", "unslop", "swarm", "swarmstack-help", "loose-ends"}
+SKILLS = {"grill-with-docs", "code-review", "setup-project", "delivery", "adhd-output", "unslop", "swarm", "swarmstack-help", "loose-ends", "swarmstack"}
 AUTHORITY = {"create_threads", "create_branches", "push_issue_branches", "open_prs", "merge_integration", "promote_production", "deploy"}
 
 

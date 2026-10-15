@@ -1,3 +1,5 @@
+<!-- Title: the user-visible result in plain words, then the issue number, e.g. "Settings sidebar stays visible in narrow windows (#32)". Avoid internal slice, round or tracking codes. -->
+
 ## Problem
 
 <!-- In one or two sentences, describe the user's problem and the trigger. Say what happened and what should happen. Link the owning issue or accepted requirement. -->
@@ -15,7 +17,7 @@ Dependencies:
 
 ## Verification
 
-<!-- Name the tested commit/build and fixture. List checks actually performed, their observed results and evidence links. Retain relevant failures, skips and warnings. Explain which original requirement each material check proves; a test count alone is insufficient. -->
+<!-- Start with one sentence on what was checked and the result. Name the tested commit/build and fixture. List checks actually performed, their observed results and evidence links; link full logs and receipts instead of pasting them. Retain relevant failures, skips and warnings. Explain which original requirement each material check proves; a test count alone is insufficient. -->
 
 Tested source/build:
 

@@ -32,7 +32,7 @@ Changes of direction (the first four rows) are limited to one every five hours, 
 
 A small Python script keeps track of these commands in a local SQLite file, so the limit survives chat restarts. It doesn't send messages or run as a service. Before relying on it, read the [command contract](skills/swarm/references/commands.md) and [what has been verified](docs/swarm-verification.md).
 
-Lost track? `/loose-ends cover` goes back through the current conversation and lists unanswered questions, offers nobody confirmed, contradictions and missing pieces. `/loose-ends catchup` catches you up on the whole project after time away. Neither changes anything; open decisions come back as A–D questions.
+Lost track? `/loose-ends cover` goes back through the current conversation and lists unanswered questions, offers nobody confirmed, contradictions and missing pieces. `/loose-ends catchup` catches you up on the whole project after time away, and `/loose-ends good morning` covers the night since your last message. Neither changes anything; open decisions come back as A–D questions.
 
 Not sure what to ask? `/swarmstack-help <question>` answers from the documentation, suggests one prompt and links the source. It doesn't start work or message the orchestrator. Your chat tool must be able to find the skill first; check that during setup.
 

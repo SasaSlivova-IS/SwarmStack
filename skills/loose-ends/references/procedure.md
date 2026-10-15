@@ -6,6 +6,7 @@ The user moves between ideas faster than any one thread can close them. This pro
 
 - **cover:** the current conversation, from its start or from the point the user names. Include messages relayed from other agents.
 - **catchup:** the project since the user last engaged with it. Use, in order: the starting point the user gives; the user's last message in the channel where agents report to them; otherwise ask the user for a date. Say which starting point you used.
+- **good morning:** from the user's last message before their overnight break to the message that invoked this mode. If that break is unclear, use their last message of the previous calendar day and say so.
 
 ## Gather
 
@@ -13,7 +14,7 @@ Read before writing. Check every fact against its source; if a source is unavail
 
 **cover** reads the conversation itself, then the records it points to: pending decisions, the decisions record and any file a question or offer names. Ask the project configuration where these live; do not assume paths.
 
-**catchup** reads the project's current state and accepted decisions, the issue tracker, open pull requests, active threads or agents and their last reports, and the release or integration branch. Ask the project configuration where these live; do not assume paths.
+**catchup** and **good morning** read the project's current state and accepted decisions, the issue tracker, open pull requests, active threads or agents and their last reports, and the release or integration branch. Ask the project configuration where these live; do not assume paths.
 
 ## Find loose ends
 
@@ -27,14 +28,15 @@ Look for each kind. Skip a kind when nothing applies; never invent an item to fi
 6. **Stale or wrong facts.** Something said in the conversation that the records now show is out of date.
 7. **Opportunities.** At most three. A cheap step that would remove a recurring problem, reuse something that already exists, or merge two pieces of work.
 
-In **catchup**, first sort what changed into: finished, newly blocked, waiting on the user, and still running. Finished means it meets the project's agreed done criteria, not that a step passed.
+In **catchup** and **good morning**, first sort what changed into: finished, newly blocked, waiting on the user, and still running. Finished means it meets the project's agreed done criteria, not that a step passed.
 
 ## Report
 
 Open with one sentence: how many things need the user, or that nothing does.
 
-- **catchup** then gives what changed in short plain lines, one per piece of work, saying whether it is finished, running, blocked or unchecked. Keep this part under about 150 words.
-- Both modes then list **waiting on you**. Ask the 3–5 most important as full grill-with-docs questions, ranked by importance. List the rest as one line each: identifier, topic and what is needed.
+- **catchup** and **good morning** then give what changed in short plain lines, one per piece of work, saying whether it is finished, running, blocked or unchecked. Keep this part under about 150 words.
+- **good morning** adds what is planned or running for today, in at most three lines.
+- Every mode then lists **waiting on you**. In good morning this includes every open decision and question, not only those raised overnight. Ask the 3–5 most important as full grill-with-docs questions, ranked by importance. List the rest as one line each: identifier, topic and what is needed.
 - Then contradictions, missing pieces and stale facts, each with a proposed fix as A–D when the user must choose, or one line when an agent can fix it.
 - Then up to three opportunities.
 - End with one line naming the work an agent can do without the user, and an answer example that pairs each identifier with its topic.

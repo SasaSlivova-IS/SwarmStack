@@ -16,8 +16,8 @@
       "origin": "User-customised local Matt Pocock skill",
       "upstream": "https://github.com/mattpocock/skills",
       "snapshot": "references/procedure.md",
-      "sha256": "a2aad7391eada9b65fa45c4d19e72734fbde0d389c82c88449642b3294110e2a",
-      "changes": "Customised question procedure; adds a Use case part and always four options (A–D, with a demonstration/defer option when no fourth real alternative exists); entrypoint attribution moved to central records.",
+      "sha256": "84c3c54b41bbad214f80101942b4c387dd76569be4dc576e205db0f39ed6a9f9",
+      "changes": "Customised question procedure; adds a Use case part and always four options (A–D, with a demonstration/defer option when no fourth real alternative exists) and requires every question identifier to be paired with its topic, re-asking earlier questions in full; entrypoint attribution moved to central records.",
       "author": "Matt Pocock",
       "source_skill": "https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs",
       "original_customised_sha256": "a87de7997de3ddf45d1d02e925c32d8fa275b318f3e6e86abb28949a945c28ea"

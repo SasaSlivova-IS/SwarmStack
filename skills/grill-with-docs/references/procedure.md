@@ -14,6 +14,7 @@ Use the project's records and source to identify decisions that still need the u
 - Apply accepted rules and make reversible technical choices yourself. Ask about unresolved product behavior, authority, money or an explicit conflict between accepted records.
 - Separate accepted requirements, proposals, implementation and verified behavior. A screenshot or authored test does not prove the workflow works.
 - Consolidate questions from collaborating agents. Remove duplicates and answered questions; preserve existing numbers or chat-specific identifiers. Do not restart numbering at 1 or silently renumber pending questions.
+- Never refer to a question by its identifier alone. Pair it with its topic every time, for example "45-2 (agent deletes and the 30-day bin)". When asking for an answer to a question raised earlier, show it again in full; do not point to an earlier message.
 
 ## Question format
 

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "status": "draft",
+  "name": "REPLACE_WITH_PROJECT_NAME",
+  "goal": "REPLACE_WITH_USER_PROBLEM",
+  "success": "REPLACE_WITH_OBSERVABLE_SUCCESS",
+  "github_repository": "owner/repository",
+  "primary_branch": "main",
+  "integration_branch": "experimental",
+  "requirements_path": "docs/requirements.md",
+  "glossary_path": "docs/glossary.md",
+  "test_environment": "REPLACE_WITH_ISOLATED_TEST_ENVIRONMENT",
+  "commands": {
+    "test": "REPLACE_WITH_VERIFIED_COMMAND",
+    "lint": null,
+    "typecheck": null,
+    "build": null
+  },
+  "models": {
+    "frontend": {
+      "provider": "SELECT_FROM_LIVE_HOST",
+      "model": "SELECT_FROM_LIVE_HOST",
+      "effort": "SELECT_SUPPORTED_EFFORT"
+    },
+    "backend": {
+      "provider": "SELECT_FROM_LIVE_HOST",
+      "model": "SELECT_FROM_LIVE_HOST",
+      "effort": "SELECT_SUPPORTED_EFFORT"
+    },
+    "review": {
+      "provider": "SELECT_FROM_LIVE_HOST",
+      "model": "SELECT_FROM_LIVE_HOST",
+      "effort": "SELECT_SUPPORTED_EFFORT"
+    }
+  },
+  "budget": {
+    "spend_limit_usd": 0,
+    "paid_overage": false,
+    "allowed_data": "public and synthetic only until explicitly changed"
+  },
+  "authority": {
+    "create_threads": false,
+    "create_branches": false,
+    "push_issue_branches": false,
+    "open_prs": false,
+    "merge_integration": false,
+    "promote_production": false,
+    "deploy": false
+  },
+  "human_ux_acceptance_required": true,
+  "skills": [
+    "grill-with-docs",
+    "code-review",
+    "setup-project",
+    "delivery",
+    "adhd-output",
+    "unslop"
+  ]
+}

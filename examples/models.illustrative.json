@@ -1,0 +1,66 @@
+{
+  "illustrative": true,
+  "cohort": "ILLUSTRATIVE same task, same quality rubric",
+  "configurations": [
+    {
+      "id": "cheap",
+      "provider": "illustrative",
+      "model": "Example-A",
+      "effort": "low",
+      "cohort": "ILLUSTRATIVE same task, same quality rubric",
+      "quality": 60,
+      "cost_per_task_usd": 0.01,
+      "latency_seconds": 2,
+      "source": "invented fixture, not Artificial Analysis",
+      "observed_at": "2026-10-15"
+    },
+    {
+      "id": "balanced",
+      "provider": "illustrative",
+      "model": "Example-B",
+      "effort": "medium",
+      "cohort": "ILLUSTRATIVE same task, same quality rubric",
+      "quality": 80,
+      "cost_per_task_usd": 0.03,
+      "latency_seconds": 4,
+      "source": "invented fixture, not Artificial Analysis",
+      "observed_at": "2026-10-15"
+    },
+    {
+      "id": "dominated",
+      "provider": "illustrative",
+      "model": "Example-C",
+      "effort": "medium",
+      "cohort": "ILLUSTRATIVE same task, same quality rubric",
+      "quality": 70,
+      "cost_per_task_usd": 0.05,
+      "latency_seconds": 6,
+      "source": "invented fixture, not Artificial Analysis",
+      "observed_at": "2026-10-15"
+    },
+    {
+      "id": "strong",
+      "provider": "illustrative",
+      "model": "Example-B",
+      "effort": "high",
+      "cohort": "ILLUSTRATIVE same task, same quality rubric",
+      "quality": 90,
+      "cost_per_task_usd": 0.08,
+      "latency_seconds": 8,
+      "source": "invented fixture, not Artificial Analysis",
+      "observed_at": "2026-10-15"
+    },
+    {
+      "id": "unknown",
+      "provider": "illustrative",
+      "model": "Example-D",
+      "effort": "low",
+      "cohort": "ILLUSTRATIVE same task, same quality rubric",
+      "quality": null,
+      "cost_per_task_usd": 0.001,
+      "latency_seconds": 1,
+      "source": "invented fixture, not Artificial Analysis",
+      "observed_at": "2026-10-15"
+    }
+  ]
+}

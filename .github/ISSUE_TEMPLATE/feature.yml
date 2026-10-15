@@ -1,0 +1,34 @@
+name: Feature or improvement
+description: Describe the user problem and complete issue outcome.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem and trigger
+      description: Who is affected, what happens now, and what should happen instead?
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Desired behavior and example
+      description: Include relevant source/build and environment. Keep secrets and real private data out.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope, decisions and dependencies
+      description: Link accepted requirements and prior work. Separate proposals, non-goals, CLI/UI boundaries and unresolved choices.
+  - type: textarea
+    id: done
+    attributes:
+      label: Done means
+      description: Observable requirements, regression/workflow proof, independent review, agreed integration and required human acceptance.
+    validations:
+      required: true
+  - type: textarea
+    id: owner
+    attributes:
+      label: Dedicated owner and next action
+      description: Lead/thread, branch, genuine blockers and current evidence. The lead owns the complete issue, not only a slice.

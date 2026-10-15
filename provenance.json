@@ -1,0 +1,38 @@
+{
+  "sources": [
+    {
+      "skill": "code-review",
+      "origin": "User-customised local Matt Pocock skill",
+      "upstream": "https://github.com/mattpocock/skills",
+      "snapshot": "references/procedure.md",
+      "sha256": "22d80f0653c6116d33e7002b8db33eb16739b22d84d56e2bf4c531e363767499",
+      "changes": "Preserved procedure bytes; short entrypoint and portability notes added."
+    },
+    {
+      "skill": "grill-with-docs",
+      "origin": "User-customised local Matt Pocock skill",
+      "upstream": "https://github.com/mattpocock/skills",
+      "snapshot": "references/procedure.md",
+      "sha256": "a87de7997de3ddf45d1d02e925c32d8fa275b318f3e6e86abb28949a945c28ea",
+      "changes": "Preserved procedure bytes; short entrypoint and portability notes added."
+    },
+    {
+      "source": "mattpocock/skills",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "license_path": "licenses/matt-pocock.txt",
+      "license_sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "source": "ayghri/i-have-adhd",
+      "revision": "1ecea1993b7fce257ffbd686c070948b5e07eda6",
+      "license_path": "licenses/i-have-adhd.txt",
+      "license_sha256": "8acbb618089b738404f76ac60fca1aaa995d9a87995eddf95f0b777acd7f7d2c"
+    },
+    {
+      "skill": "adhd-output",
+      "upstream": "https://github.com/ayghri/i-have-adhd/blob/1ecea1993b7fce257ffbd686c070948b5e07eda6/skills/i-have-adhd/SKILL.md",
+      "upstream_sha256": "88955c019bbb1419ff4b49dbb1f80a867467de6233d7865af2e06a7d7b76c7d3",
+      "changes": "Condensed adaptation; no forced estimates, repeated plan narration or unnecessary user tasks; no automatic session toggle."
+    }
+  ]
+}

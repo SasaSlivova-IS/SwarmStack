@@ -17,3 +17,5 @@ Modes:
 Either mode accepts a starting point, such as `/loose-ends cover since the pricing discussion` or `/loose-ends catchup since 1 March`. With no mode given, ask which one in a single short question.
 
 The report is read-only: do not dispatch agents, message other threads, run builds or tests, or change records. Load [grill-with-docs](../grill-with-docs/SKILL.md) and its procedure before asking open decisions. Keep existing question identifiers and always add the topic.
+
+`good morning` never switches swarm availability. Use `/swarm day` separately to mark the user available; without it the current day/night mode stays unchanged.

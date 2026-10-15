@@ -24,6 +24,8 @@ Give complete scope, Done criteria, source base, owning requirements, allowed ef
 
 <!-- swarm:start -->
 At normal coordination checkpoints, use the [swarm command contract](../skills/swarm/references/commands.md) to reconcile offered/delivered requests, record actual application and check the latest eligible pending direction. Do not infer application from a send receipt or wake the LLM just for cooldown expiry. Respect the current pause intent.
+
+For day/night handoffs, load [availability](../skills/swarm/references/availability.md) only when needed. Reconcile the latest availability intent before application. Night expects no prompt user reply; keep questions routed and continue independent authorised work. Day restores availability, not permissions or a paused goal.
 <!-- swarm:end -->
 
 Read a finite queue batch at a safe boundary. Reconcile old grants/pins and preserve unresolved questions for current owners. Never bulk replay stale instructions into a released thread. Use supported promotion only if available; no forced restart, invented wake guarantee or quota retry loop.

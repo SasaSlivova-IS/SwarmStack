@@ -25,6 +25,8 @@ def parse_command(text, repository):
         return "direction", value, "queue"
     if value in {"status", "blockers"}:
         return "report", value, "read"
+    if value in {"day", "night"}:
+        return "availability", value, "queue"
     if value in {"pause", "resume"}:
         return "control", value, "steer" if value == "pause" else "wake_or_queue"
     url = urlsplit(value)
@@ -126,6 +128,12 @@ class Gate:
             if row and not self.clock_rollback and 0 <= self.now - row["observed"] < self.options["status_ttl_seconds"]:
                 return self.output("CACHED", route="read", report=target, observed_at=row["observed"], payload=json.loads(row["payload"]))
             return self.output("READ", route="read", report=target, reason="refresh from actual records; queue one request only if Root must supply missing facts")
+        if kind == "availability":
+            previous = self.db.execute("SELECT * FROM commands WHERE id=?", (self.get("latest_availability"),)).fetchone()
+            if previous and previous["target"] == target and previous["state"] in (*INFLIGHT, "applied"):
+                self.db.execute("INSERT INTO commands VALUES (?,?,?,?,?,?,?,NULL)", (ident, request_id, kind, target, route, "noop", self.now))
+                status = "ALREADY_ACTIVE" if previous["state"] == "applied" else "ALREADY_REQUESTED"
+                return self.output(status, dict(previous, route="none"))
         active = self.get("active_direction")
         if kind == "direction" and active == target and not self.inflight():
             self.db.execute("UPDATE commands SET state='superseded' WHERE kind='direction' AND state='pending'")
@@ -134,6 +142,10 @@ class Gate:
         state = "pending" if kind == "direction" else "offered"
         self.db.execute("INSERT INTO commands VALUES (?,?,?,?,?,?,?,NULL)", (ident, request_id, kind, target, route, state, self.now))
         row = self.db.execute("SELECT * FROM commands WHERE id=?", (ident,)).fetchone()
+        if kind == "availability":
+            self.set("latest_availability", ident)
+            self.db.execute("DELETE FROM cache")
+            return self.output("ALLOW", row, instruction="queue availability only; check latest_availability before application; no goal resume or expanded authority")
         if kind == "control":
             self.set("latest_control", ident)
             if target == "pause":
@@ -189,6 +201,10 @@ class Gate:
             elif row["target"] in {"pause", "resume"} and self.get("latest_control") == ident:
                 self.set("paused", row["target"] == "pause")
                 self.set("pause_requested", row["target"] == "pause")
+            elif row["kind"] == "availability" and self.get("latest_availability") == ident:
+                self.set("availability", row["target"])
+                self.set("availability_applied_command", ident)
+                self.set("availability_applied_at", self.now)
             self.db.execute("DELETE FROM cache")
         return self.output("RECORDED", dict(row, state=result))
 
@@ -233,7 +249,18 @@ def main():
             result = gate.next()
         elif args.action == "inspect":
             rows = gate.db.execute("SELECT * FROM commands WHERE state IN ('offered','delivered','uncertain','pending') ORDER BY created DESC LIMIT 10").fetchall()
-            result = gate.output("STATE", active_direction=gate.get("active_direction"), eligible_at=gate.get("eligible_at", 0), pause_requested=gate.get("pause_requested", False), latest_control=gate.get("latest_control"), outstanding=[dict(row) for row in rows])
+            latest = gate.db.execute("SELECT * FROM commands WHERE id=?", (gate.get("latest_availability"),)).fetchone()
+            result = gate.output(
+                "STATE", active_direction=gate.get("active_direction"),
+                eligible_at=gate.get("eligible_at", 0),
+                pause_requested=gate.get("pause_requested", False),
+                latest_control=gate.get("latest_control"),
+                availability=gate.get("availability"),
+                availability_applied_command=gate.get("availability_applied_command"),
+                availability_applied_at=gate.get("availability_applied_at"),
+                latest_availability=gate.get("latest_availability"),
+                availability_request=dict(latest) if latest else None,
+                outstanding=[dict(row) for row in rows])
         elif args.action == "receipt":
             result = gate.receipt(args.command_id, args.result, args.external_id)
         elif args.action == "cache":

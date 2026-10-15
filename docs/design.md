@@ -58,6 +58,8 @@ Keep upstream origins and local changes. Extend existing owners before adding ov
 
 The user-facing swarm skill exposes intent-level controls backed by a standalone local SQLite gate. Root still owns execution. Five-hour direction windows, cache reads, idempotent transport keys, explicit receipts and pending priorities reduce repeated messages without adding another orchestration service. See the [contract](../skills/swarm/references/commands.md).
 
+Day/night availability is independent of direction and pause state. It persists in the same local gate, with separate requested, delivered and applied states. Night prepares an authorised-work handoff; day marks the user available again. Neither changes budgets or creates monitoring. `/loose-ends good morning` remains a read-only report and never changes mode.
+
 ## Command ownership
 
 [Command language](../CONTEXT.md) separates /swarm team controls, /swarmstack project commands and independent skills. The project router loads only the selected setup, help, status, health or update reference. Legacy setup-project and swarmstack-help configuration entries map to swarmstack for fresh adoption; installed snapshots require a reviewed migration.

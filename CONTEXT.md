@@ -5,7 +5,10 @@ The toolkit separates project management from controls for a running agent team.
 ## Language
 
 **Swarm controls**:
-The user-facing interface for team direction, progress, blockers, pause and resume, named /swarm.
+The user-facing interface for team direction, availability, progress, blockers, pause and resume, named /swarm.
+
+**Swarm availability**:
+The user's declared day or night mode, indicating whether the swarm should expect replies. It is separate from work priority, permissions and whether the goal is paused.
 
 **Project commands**:
 The interface for project setup, installed toolkit state, installation health, reviewed updates and guidance, named /swarmstack. Each command has a separate procedure.

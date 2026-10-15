@@ -12,10 +12,14 @@
 | `/swarm blockers` | Decisions or external prerequisites requiring the user. | Read |
 | `/swarm pause` | Stop new dispatch and checkpoint active work safely. | Steer now |
 | `/swarm resume` | Continue the same authorised goal/checkpoint. | Wake idle Root; queue if already running |
+| `/swarm day` | User is available for batched decisions and review-ready work. | Queue |
+| `/swarm night` | User is unavailable; record questions and continue independent authorised work. | Queue |
 
 Use a full HTTPS issue URL in the configured GitHub repository, not a bare number, PR, arbitrary domain or another project. The helper normalises trailing slash/query/fragment into the same issue target. It does not fetch the issue or grant implementation authority.
 
 Natural language can map to these intents when clear. Ambiguous changes need one concise clarification. Root retains issue decomposition, lead ownership, workspaces, review, tests, corrections and authorised integration. The user need not dispatch those steps manually.
+
+Day/night use the separate [availability procedure](availability.md). They do not change direction, start a cooldown, resume a paused goal or invoke a morning brief. They persist until the next explicit availability command; time of day and a chat message alone do not switch modes.
 
 ## Status and blockers
 
@@ -41,7 +45,7 @@ Green and Root must invoke the helper against the same confirmed canonical proje
 
 State is `.swarmstack/local/swarm.sqlite3`, protected from accidental Git publication by its directory-local .gitignore. Keep the state on a local disk; shared network filesystems and hostile concurrent file replacement are outside v1's guarantees. SQLite transactions serialize ordinary concurrent invocations. State is bound to the configured project path, repository, host and Root identity; do not copy it between projects.
 
-One compact JSON response names status, route, command ID and stable transport key. ALLOW authorises only the next relay within existing project grants. READ asks Green to inspect facts, not message Root routinely. CACHED includes its observation time. ALREADY_ACTIVE and ALREADY_RECORDED send nothing. DEFER retains the latest pending direction; EMPTY has nothing ready. ERROR is a refusal, not permission to bypass the gate.
+One compact JSON response names status, route, command ID and stable transport key. ALLOW authorises only the next relay within existing project grants. READ asks Green to inspect facts, not message Root routinely. CACHED includes its observation time. ALREADY_ACTIVE, ALREADY_REQUESTED and ALREADY_RECORDED send nothing. ALREADY_REQUESTED preserves the original outstanding availability receipt, including uncertain delivery. DEFER retains the latest pending direction; EMPTY has nothing ready. ERROR is a refusal, not permission to bypass the gate.
 
 ## Five-hour direction window
 

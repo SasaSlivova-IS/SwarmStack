@@ -138,6 +138,78 @@ class Swarm(unittest.TestCase):
         self.assertEqual((cached["status"], cached["payload"], cached["observed_at"]), ("CACHED", {"actual": "snapshot"}, 1000))
         self.assertEqual(self.call("request", "/swarm status", "status3", now=1060)["status"], "READ")
 
+    def test_availability_does_not_change_direction_cooldown_or_pause(self):
+        self.apply()
+        self.apply("/swarm pause", "pause", now=1003)
+        for index, mode in enumerate(("night", "day")):
+            self.apply("/swarm " + mode, mode, now=1006 + index * 3)
+            state = self.cli("inspect")[1]
+            self.assertEqual(state["availability"], mode)
+            self.assertEqual(state["active_direction"], "backend")
+            self.assertEqual(state["eligible_at"], 19002)
+            self.assertTrue(state["pause_requested"])
+        self.assertEqual(self.call("next", now=20000)["status"], "EMPTY")
+
+    def test_availability_request_delivery_and_application_survive_processes(self):
+        self.assertIsNone(self.cli("inspect")[1]["availability"])
+        rc, night = self.cli("request", "/swarm night", "--request-id", "night")
+        self.assertEqual((rc, night["status"], night["route"]), (0, "ALLOW", "queue"))
+        state = self.cli("inspect")[1]
+        self.assertIsNone(state["availability"])
+        self.assertEqual(state["availability_request"]["target"], "night")
+        with self.assertRaises(ValueError): self.call("receipt", night["command_id"], "applied")
+        self.cli("receipt", night["command_id"], "delivered", "--external-id", "host-night")
+        self.assertIsNone(self.cli("inspect")[1]["availability"])
+        self.cli("receipt", night["command_id"], "applied")
+        state = self.cli("inspect")[1]
+        self.assertEqual(state["availability"], "night")
+        self.assertEqual(state["availability_applied_command"], night["command_id"])
+        self.assertIsInstance(state["availability_applied_at"], (int, float))
+
+    def test_late_night_receipt_cannot_overwrite_latest_day(self):
+        night = self.call("request", "/swarm night", "night")
+        day = self.apply("/swarm day", "day", now=1001)
+        self.call("receipt", night["command_id"], "delivered", "host-night", now=1004)
+        self.call("receipt", night["command_id"], "applied", now=1005)
+        state = self.cli("inspect")[1]
+        self.assertEqual(state["availability"], "day")
+        self.assertEqual(state["latest_availability"], day["command_id"])
+        self.assertEqual(state["availability_applied_command"], day["command_id"])
+
+    def test_repeated_availability_coalesces_without_hiding_uncertainty(self):
+        night = self.call("request", "/swarm night", "night")
+        self.call("receipt", night["command_id"], "uncertain")
+        duplicate = self.call("request", "/swarm night", "night-again")
+        self.assertEqual((duplicate["status"], duplicate["route"], duplicate["command_id"]), ("ALREADY_REQUESTED", "none", night["command_id"]))
+        self.assertEqual(duplicate["state"], "uncertain")
+        with self.assertRaises(ValueError): self.call("request", "/swarm day", "night-again")
+        self.call("receipt", night["command_id"], "delivered", "host-night")
+        self.call("receipt", night["command_id"], "applied")
+        self.assertEqual(self.call("request", "/swarm night", "night-third")["status"], "ALREADY_ACTIVE")
+
+    def test_failed_availability_allows_new_request_without_claiming_apply(self):
+        night = self.call("request", "/swarm night", "night")
+        self.call("receipt", night["command_id"], "failed")
+        new = self.call("request", "/swarm night", "night-retry")
+        self.assertEqual(new["status"], "ALLOW")
+        self.assertNotEqual(new["command_id"], night["command_id"])
+        self.assertIsNone(self.cli("inspect")[1]["availability"])
+
+    def test_availability_preserves_pending_direction_and_invalidates_reports(self):
+        self.apply()
+        self.call("request", "/swarm frontend", "frontend", now=1003)
+        self.call("cache", "status", {"availability": "old"}, now=1004)
+        self.apply("/swarm night", "night", now=1005)
+        self.assertEqual(self.call("request", "/swarm status", "status", now=1008)["status"], "READ")
+        self.assertEqual(self.call("next", now=19002)["target"], "frontend")
+
+    def test_corrupt_database_refuses_availability_without_pause_fallback(self):
+        local = self.project / ".swarmstack/local"; local.mkdir()
+        (local / "swarm.sqlite3").write_bytes(b"corrupt fixture")
+        for mode in ("day", "night"):
+            rc, result = self.cli("request", "/swarm " + mode, "--request-id", mode)
+            self.assertEqual((rc, result["status"], result["route"]), (1, "ERROR", "none"))
+
     def test_meaningful_applied_change_invalidates_reports(self):
         self.call("cache", "blockers", {"pending": []})
         self.apply(now=1001)

@@ -71,6 +71,23 @@ class Adoption(unittest.TestCase):
         self.assertFalse((self.target / ".agents/skills/swarm").exists())
         self.assertFalse((self.target / ".swarmstack/scripts/swarm.py").exists())
 
+    def test_adopted_day_night_commands_persist_without_host_dispatch(self):
+        result = self.invoke(config(), "--apply")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.target / ".agents/skills/swarm/references/availability.md").is_file())
+        script = self.target / ".swarmstack/scripts/swarm.py"
+        args = [sys.executable, str(script), "--project", str(self.target)]
+        offered = subprocess.run([*args, "request", "/swarm night", "--request-id", "night"], capture_output=True, text=True)
+        self.assertEqual(offered.returncode, 0, offered.stderr)
+        self.assertEqual(json.loads(offered.stdout)["route"], "queue")
+        inspected = subprocess.run([*args, "inspect"], capture_output=True, text=True)
+        self.assertEqual(inspected.returncode, 0, inspected.stderr)
+        state = json.loads(inspected.stdout)
+        self.assertEqual(state["availability_request"]["target"], "night")
+        self.assertIsNone(state["availability"])
+        self.assertIsNone(state["active_direction"])
+        self.assertFalse(any(json.loads((self.target / ".swarmstack/project.json").read_text())["authority"].values()))
+
     def test_previous_seven_skill_setup_and_help_only_adoption(self):
         for omit in ["swarmstack", "swarm"]:
             with self.subTest(omit=omit), tempfile.TemporaryDirectory() as directory:

@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Route only the first word after `/swarmstack` and load only its procedure:
 
-- **setup:** [project setup](references/setup.md). Inspect, interview, preview and obtain confirmation before installation.
+- **setup:** [project setup](references/setup.md). After local skill installation, inspect, interview and apply only approved project details.
 - **help:** [documentation help](references/help.md). Answer without running commands, dispatching work or messaging Root.
 - **status:** [installed state](references/status.md). Read local version, selected skills and configuration.
 - **health:** [installation checks](references/health.md). Find missing files and broken mappings without repairs.

@@ -13,15 +13,15 @@ def local_path(value):
     return isinstance(value, str) and bool(value) and not value.startswith(("/", "\\")) and not re.match(r"^[A-Za-z]:", value) and ".." not in value.replace("\\", "/").split("/")
 
 
-def validate(config):
+def validate(config, *, draft=False):
     if not isinstance(config, dict):
         raise ValueError("configuration must be an object")
     required = {"schema_version", "status", "name", "goal", "success", "github_repository", "primary_branch", "integration_branch", "requirements_path", "glossary_path", "test_environment", "commands", "models", "budget", "authority", "human_ux_acceptance_required", "skills"}
-    if not required <= set(config) or set(config) - required - {"swarm"} or config.get("schema_version") != 1 or config.get("status") != "confirmed":
+    if not required <= set(config) or set(config) - required - {"swarm"} or config.get("schema_version") != 1 or config.get("status") != ("draft" if draft else "confirmed"):
         raise ValueError("use the exact v1 configuration and confirm setup first")
     for field in ["name", "goal", "success", "github_repository", "primary_branch", "integration_branch", "test_environment"]:
         value = config[field]
-        if not isinstance(value, str) or not value.strip() or any(x in value for x in ["REPLACE_", "SELECT_", "\n", "\r"]):
+        if not isinstance(value, str) or not value.strip() or any(x in value for x in (["\n", "\r"] if draft else ["REPLACE_", "SELECT_", "\n", "\r"])):
             raise ValueError("unresolved or invalid field: " + field)
     if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", config["github_repository"]):
         raise ValueError("github_repository must be owner/repository")
@@ -30,12 +30,14 @@ def validate(config):
     if not isinstance(config["commands"], dict) or set(config["commands"]) != {"test", "lint", "typecheck", "build"}:
         raise ValueError("commands must name test/lint/typecheck/build, nullable when inapplicable")
     for name, command in config["commands"].items():
-        if command is not None and (not isinstance(command, str) or not command.strip() or "REPLACE_" in command):
+        if command is not None and (not isinstance(command, str) or not command.strip() or (not draft and "REPLACE_" in command)):
             raise ValueError("unresolved command: " + name)
     if not config["commands"]["test"]:
         raise ValueError("an actual test/check command is required")
     if not isinstance(config["authority"], dict) or set(config["authority"]) != AUTHORITY or not all(type(v) is bool for v in config["authority"].values()):
         raise ValueError("authority grants must be explicit booleans")
+    if draft and any(config["authority"].values()):
+        raise ValueError("draft installation grants no effects")
     if type(config["human_ux_acceptance_required"]) is not bool:
         raise ValueError("human acceptance policy must be explicit")
     budget = config["budget"]
@@ -49,11 +51,11 @@ def validate(config):
     if not {"grill-with-docs", "code-review", "swarmstack", "delivery", "adhd-output", "unslop"} <= set(config["skills"]):
         raise ValueError("select the core skills, including swarmstack for project setup")
     if "swarm" in config or "swarm" in config["skills"]:
-        validate_options(config.get("swarm", {}))
+        validate_options(config.get("swarm", {}), draft=draft)
     if not isinstance(config["models"], dict) or set(config["models"]) != {"frontend", "backend", "review"}:
         raise ValueError("select frontend/backend/review models from the live host")
     for model in config["models"].values():
-        if not isinstance(model, dict) or set(model) != {"provider", "model", "effort"} or any(not isinstance(v, str) or not v.strip() or "SELECT_" in v for v in model.values()):
+        if not isinstance(model, dict) or set(model) != {"provider", "model", "effort"} or any(not isinstance(v, str) or not v.strip() or (not draft and "SELECT_" in v) for v in model.values()):
             raise ValueError("model IDs and efforts must be resolved")
 
 
@@ -71,10 +73,10 @@ def normalise_config(config):
     return config
 
 
-def validate_options(options):
+def validate_options(options, *, draft=False):
     if not isinstance(options, dict) or set(options) != {"host", "orchestrator", "direction_cooldown_seconds", "status_ttl_seconds"}:
         raise ValueError("configure the swarm host, orchestrator and cooldowns first")
-    if options["host"] not in {"t3", "codex", "claude", "manual"} or not isinstance(options["orchestrator"], str) or not options["orchestrator"].strip():
+    if options["host"] not in {"t3", "codex", "claude", "manual"} or not ((draft and options["orchestrator"] is None) or (isinstance(options["orchestrator"], str) and options["orchestrator"].strip())):
         raise ValueError("verify and configure one actual orchestrator identity")
     for key, minimum, maximum in [("direction_cooldown_seconds", MIN_COOLDOWN, 31536000), ("status_ttl_seconds", 0, 3600)]:
         value = options[key]

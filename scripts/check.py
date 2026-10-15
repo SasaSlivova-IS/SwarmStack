@@ -30,7 +30,7 @@ def link_errors(root, skip_templates=False):
 
 def check(root=ROOT):
     errors = link_errors(root, skip_templates=True)
-    required = ["README.md", "AGENTS.md", "SETUP.md", "LICENSE", "THIRD_PARTY.md", "docs/design.md", "docs/review.md", "templates/project.example.json", ".github/pull_request_template.md", ".github/ISSUE_TEMPLATE/bug.yml", ".github/ISSUE_TEMPLATE/feature.yml"]
+    required = ["README.md", "AGENTS.md", "INSTALL.md", "scripts/install.py", "SETUP.md", "LICENSE", "THIRD_PARTY.md", "docs/design.md", "docs/review.md", "templates/project.example.json", ".github/pull_request_template.md", ".github/ISSUE_TEMPLATE/bug.yml", ".github/ISSUE_TEMPLATE/feature.yml"]
     errors.extend("missing " + name for name in required if not (root / name).is_file())
     for p in (root / "skills").glob("*/SKILL.md"):
         body = p.read_text()

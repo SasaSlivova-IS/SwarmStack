@@ -33,9 +33,12 @@ def optional_swarm(body, enabled):
     return re.sub(pattern, lambda match: match[1].strip() if enabled else "", body, flags=re.S)
 
 
-def render_outputs(config):
+def render_outputs(config, *, installation_only=False, skill_hosts=None):
     config = normalise_config(config)
-    validate(config)
+    validate(config, draft=installation_only)
+    skill_hosts = ["codex"] if skill_hosts is None else skill_hosts
+    if not skill_hosts or len(set(skill_hosts)) != len(skill_hosts) or not set(skill_hosts) <= {"codex", "claude"}:
+        raise ValueError("select codex, claude or both skill mappings")
     uses_swarm = "swarm" in config["skills"]
     outputs = {}
     def add(name, data):
@@ -52,6 +55,7 @@ def render_outputs(config):
         add(".swarmstack/guides/" + src.name, body)
     setup = (ROOT / "SETUP.md").read_text().replace("](skills/", "](../.agents/skills/")
     add(".swarmstack/SETUP.md", setup)
+    add(".swarmstack/INSTALL.md", (ROOT / "INSTALL.md").read_text().replace("](skills/", "](../.agents/skills/"))
     add(".swarmstack/templates/project.example.json", (ROOT / "templates/project.example.json").read_bytes())
     add(".swarmstack/scripts/configuration.py", (ROOT / "scripts/configuration.py").read_bytes())
     add(".swarmstack/scripts/stack.py", (ROOT / "scripts/stack.py").read_bytes())
@@ -68,17 +72,23 @@ def render_outputs(config):
                 continue
             body = src.read_text()
             if name == "swarmstack" and src.parent.name == "references":
-                body = body.replace("../../../SETUP.md", "../../../../.swarmstack/SETUP.md").replace("../../../scripts/stack.py", "../../../../.swarmstack/scripts/stack.py")
+                body = body.replace("../../../SETUP.md", "../../../../.swarmstack/SETUP.md").replace("../../../INSTALL.md", "../../../../.swarmstack/INSTALL.md").replace("../../../scripts/stack.py", "../../../../.swarmstack/scripts/stack.py")
             if src.name == "SKILL.md":
                 body = body.replace("../../SETUP.md", "../../../.swarmstack/SETUP.md").replace("../../guides/", "../../../.swarmstack/guides/").replace("../../scripts/", "../../../.swarmstack/scripts/")
             add(".agents/skills/" + name + "/" + src.relative_to(ROOT / "skills" / name).as_posix(), body)
+    if "claude" in skill_hosts:
+        for name, data in list(outputs.items()):
+            if name.startswith(".agents/skills/"):
+                outputs[name.replace(".agents/skills/", ".claude/skills/", 1)] = data
+    if installation_only:
+        outputs = {name: data for name, data in outputs.items() if name not in {"AGENTS.md", "docs/agents/issue-tracker.md", ".swarmstack/state.md", ".swarmstack/decisions.md"} and not name.startswith(".github/")}
     for src in sorted((ROOT / "licenses").glob("*.txt")):
         add(".swarmstack/licenses/" + src.name, src.read_bytes())
     add(".swarmstack/LICENSE", (ROOT / "LICENSE").read_bytes())
     add(".swarmstack/CREDITS.md", (ROOT / "CREDITS.md").read_text().replace("](skills/", "](../.agents/skills/"))
     add(".swarmstack/provenance.json", (ROOT / "provenance.json").read_bytes())
     add(".swarmstack/THIRD_PARTY.md", (ROOT / "THIRD_PARTY.md").read_text().replace("skills/*/", "../.agents/skills/*/"))
-    lock = {"toolkit": "SwarmStack", **snapshot(), "files": {name: hashlib.sha256(data).hexdigest() for name, data in outputs.items()}}
+    lock = {"toolkit": "SwarmStack", "phase": "installed" if installation_only else "configured", "skill_hosts": skill_hosts, **snapshot(), "files": {name: hashlib.sha256(data).hexdigest() for name, data in outputs.items()}}
     add(".swarmstack/lock.json", json.dumps(lock, indent=2) + "\n")
     return outputs
 
@@ -86,6 +96,11 @@ def render_outputs(config):
 def build_plan(target, config):
     target = safe_directory(target)
     outputs = render_outputs(config)
+    return new_files_plan(target, outputs)
+
+
+def new_files_plan(target, outputs):
+    target = safe_directory(target)
     for name in outputs:
         dest = target / name
         if dest.exists() or dest.is_symlink():

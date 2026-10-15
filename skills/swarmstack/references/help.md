@@ -16,6 +16,7 @@ Resolve local paths from the toolkit root. In an adopted project, guides and SET
 | Missing installation files or broken mappings | skills/swarmstack/references/health.md |
 | Fetching and applying a reviewed toolkit upgrade | skills/swarmstack/references/update.md |
 | What exists? | [README.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/README.md) |
+| Installing project-local skills before setup | [INSTALL.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/INSTALL.md), scripts/install.py |
 | Setup, permissions, existing-file refusal | [SETUP.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/SETUP.md), then skills/swarmstack/references/setup.md if needed |
 | Direction, issue links, cooldown, queue/steer, receipts | [skills/swarm/references/commands.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/skills/swarm/references/commands.md) |
 | What is actually tested or still unverified? | [docs/swarm-verification.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/docs/swarm-verification.md), and the installed project's own evidence |

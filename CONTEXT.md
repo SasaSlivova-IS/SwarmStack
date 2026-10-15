@@ -12,3 +12,9 @@ The interface for project setup, installed toolkit state, installation health, r
 
 **Standalone skill**:
 An independently invoked workflow such as /grill-with-docs or /code-review, outside the two command interfaces.
+
+**Installation**:
+Project-local skill and reusable toolkit files made available to a host, with a pinned source revision and an unconfigured draft.
+
+**Setup**:
+The project-specific requirements, instructions, configuration and permissions agreed after installation. Installation alone is not setup.

@@ -1,25 +1,21 @@
-# Project setup
+# Configure the project
 
-Set SwarmStack up in the current project, or the project the user names.
+This command fills in a project after the project-local skills are installed. It does not perform initial installation.
 
-## Check for existing setup first
+## Check the phase first
 
-Before finding the toolkit, reading the full setup guide or starting an interview, check whether the target project already contains .swarmstack. If it exists, reply:
+Read only the target's .swarmstack/lock.json and project.json first. If both describe a configured installation, or a legacy confirmed setup, reply:
 
 > SwarmStack setup already exists in this project. Nothing was changed.
 
-Then stop. Do not rerun setup, launch checks, start an interview, or offer a migration automatically. This message reports existing setup material, not verified completeness or runtime readiness. An explicit request to inspect, repair or update that material is separate work under the existing grants.
+Then stop without an interview, checks or an automatic migration offer. This reports recorded setup, not runtime readiness.
 
-For a new project, read [the setup guide](../../../SETUP.md), then use [grill-with-docs](../../grill-with-docs/SKILL.md). Inspect first, interview in short batches, record exact answers, propose concrete configuration, preview the installer output and obtain confirmation before apply. Defaults and silence are not grants.
+If the package has an installed-phase lock and a draft configuration, continue with [the setup guide](../../../SETUP.md) and [grill-with-docs](../../grill-with-docs/SKILL.md). Inspect the project, reuse checked facts, interview in short batches, record exact answers, propose project settings and AGENTS.md integration, and obtain approval before applying the configuration. Defaults and silence are not grants.
 
-## Find the toolkit
+If no local installation exists, direct the user to [installation](../../../INSTALL.md) and stop. If records are incomplete or inconsistent, report that prerequisite without guessing, reinstalling or calling the project configured. Inspection or repair is separate authorised work.
 
-Setup needs a SwarmStack checkout for its installer. Use the checkout this skill belongs to, a user-supplied path, or ~/SwarmStack if present. An adopted project's .swarmstack directory contains a snapshot, not the complete toolkit. If no checkout exists, report that prerequisite and offer to clone the public repository into a location the user confirms. Do not clone or install without confirmation.
+## Use the installed revision
 
-## Existing projects
+Configuration uses a clean toolkit checkout at the revision in the installation lock, not an arbitrary newer checkout. Find that checkout through the current skill source, a user-supplied path or ~/SwarmStack. The installed .swarmstack directory is a snapshot, not a complete checkout. Obtain permission before creating a missing checkout; preserve any existing checkout and active work.
 
-Only when the user explicitly requests inspection, repair or an update, inspect the existing project configuration and pinned revision if recorded. Existing material does not prove a complete installation. Any updates or partial-install recovery need a reviewed migration preserving existing files, not a blind fresh install.
-
-Legacy configuration names setup-project and swarmstack-help map to swarmstack during new adoption. They do not create additional slash commands. Existing installed skill directories are not deleted or overwritten by bootstrap; propose their removal only as part of an explicitly approved migration.
-
-Follow the full setup guide through verification. Toolkit installation is separate from actual host skill discovery and the adopted project's runtime checks. Do not change live swarm direction or Root state as a side effect of setup.
+Follow the setup guide through a configuration preview, exact approval, recorded application and verification. Preserve the Codex/Claude mappings selected at installation. For existing AGENTS.md or templates, the agent prepares and reviews the integration; --keep-existing is only for explicitly approved retained files and is not proof of a complete integration. Never reset project rules, run application commands or change live swarm direction just to configure the toolkit.

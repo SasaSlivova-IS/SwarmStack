@@ -1,5 +1,7 @@
 # Update the project toolkit
 
+If the project is installed but still draft, direct the user to /swarmstack setup first.
+
 Update SwarmStack instructions and tooling, not the project's application code or live swarm direction. An /swarmstack update request authorises retrieving a candidate and preparing a preview. It does not authorise applying an unseen update.
 
 ## Fetch and review a candidate

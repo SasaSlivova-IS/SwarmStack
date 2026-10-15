@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import bootstrap
 import stack
 import update
+import install
 
 
 def config():
@@ -35,7 +36,7 @@ class Stack(unittest.TestCase):
         self.project = self.base / "project"; self.project.mkdir()
         for name in ["skills", "guides", "templates", "scripts", "licenses", ".github"]:
             shutil.copytree(ROOT / name, self.source / name, ignore=shutil.ignore_patterns("__pycache__"))
-        for name in ["SETUP.md", "LICENSE", "CREDITS.md", "THIRD_PARTY.md", "provenance.json", ".gitignore"]:
+        for name in ["SETUP.md", "INSTALL.md", "LICENSE", "CREDITS.md", "THIRD_PARTY.md", "provenance.json", ".gitignore"]:
             shutil.copyfile(ROOT / name, self.source / name)
         self.git("init", "-q")
         self.commit()
@@ -221,6 +222,128 @@ class Stack(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     update.plan(self.project)
         path.write_text(json.dumps(original))
+
+    def install_draft(self, host="both"):
+        target = self.base / "new-project"; target.mkdir()
+        _, payload = install.build_plan(target, host)
+        bootstrap.apply_plan(target, payload)
+        return target
+
+    def test_installer_preview_then_project_local_skills_without_configuration(self):
+        target = self.base / "fresh"; target.mkdir()
+        _, payload = install.build_plan(target, "both")
+        self.assertEqual(list(target.iterdir()), [])
+        bootstrap.apply_plan(target, payload)
+        self.assertFalse((target / "AGENTS.md").exists())
+        self.assertFalse((target / ".github").exists())
+        self.assertTrue((target / ".agents/skills/swarmstack/SKILL.md").is_file())
+        self.assertTrue((target / ".claude/skills/swarmstack/SKILL.md").is_file())
+        self.assertEqual(stack.report(target, True)["state"], "setup_required")
+        import check
+        self.assertEqual(check.link_errors(target), [])
+        for name in ["matt-pocock.txt", "i-have-adhd.txt", "pstack.txt"]:
+            self.assertTrue((target / ".swarmstack/licenses" / name).is_file())
+
+    def test_setup_configures_installed_skills_then_generic_repeat_refuses_writes(self):
+        target = self.install_draft()
+        before = {p.relative_to(target): p.read_bytes() for p in target.rglob("*") if p.is_file()}
+        proposal, _ = update.plan(target, configure=config())
+        self.assertEqual(before, {p.relative_to(target): p.read_bytes() for p in target.rglob("*") if p.is_file()})
+        result = update.apply(target, proposal["approval_id"], configure=config())
+        self.assertEqual(result["state"], "configured")
+        self.assertTrue((target / "AGENTS.md").is_file())
+        self.assertEqual(stack.report(target, True)["state"], "installed")
+        self.assertEqual(json.loads((target / ".swarmstack/project.json").read_text()), config())
+        with self.assertRaisesRegex(ValueError, "setup already exists"):
+            update.plan(target, configure=config())
+        hosts = json.loads((target / ".swarmstack/lock.json").read_text())["skill_hosts"]
+        self.assertEqual(hosts, ["codex", "claude"])
+
+    def test_installer_preserves_existing_instructions_and_refuses_skill_collision(self):
+        target = self.base / "existing"; target.mkdir()
+        (target / "AGENTS.md").write_text("existing project rules")
+        _, payload = install.build_plan(target)
+        bootstrap.apply_plan(target, payload)
+        self.assertEqual((target / "AGENTS.md").read_text(), "existing project rules")
+        with self.assertRaises(ValueError): install.build_plan(target)
+        proposal, _ = update.plan(target, configure=config())
+        self.assertTrue(any(c["path"] == "AGENTS.md" for c in proposal["conflicts"]))
+        with self.assertRaisesRegex(ValueError, "conflicts"):
+            update.apply(target, proposal["approval_id"], configure=config())
+        # An explicitly reviewed existing-file integration remains marked as customised.
+        proposal, _ = update.plan(target, configure=config(), keep_existing=["AGENTS.md"])
+        update.apply(target, proposal["approval_id"], configure=config(), keep_existing=["AGENTS.md"])
+        self.assertIn("AGENTS.md", stack.report(target)["modified"])
+        self.assertEqual((target / "AGENTS.md").read_text(), "existing project rules")
+
+    def test_inconsistent_or_unknown_phase_is_not_setup_or_update_ready(self):
+        path = self.project / ".swarmstack/lock.json"
+        original = json.loads(path.read_text())
+        for phase in ["installed", "unknown", None]:
+            broken = copy.deepcopy(original); broken["phase"] = phase
+            path.write_text(json.dumps(broken))
+            with self.subTest(phase=phase):
+                self.assertEqual(stack.report(self.project)["state"], "incomplete")
+                with self.assertRaises(ValueError):
+                    update.plan(self.project, configure=config())
+                with self.assertRaises(ValueError):
+                    update.plan(self.project)
+        legacy = copy.deepcopy(original); legacy.pop("phase")
+        path.write_text(json.dumps(legacy))
+        self.assertEqual(stack.report(self.project)["state"], "installed")
+
+    def test_malformed_draft_config_is_reported_incomplete(self):
+        target = self.install_draft()
+        path = target / ".swarmstack/project.json"
+        draft = json.loads(path.read_text()); draft["swarm"] = None
+        path.write_text(json.dumps(draft))
+        self.assertEqual(stack.report(target)["state"], "incomplete")
+
+    def test_dirty_source_cannot_install_a_package_that_cannot_be_configured(self):
+        target = self.base / "dirty-source-project"; target.mkdir()
+        (self.source / "guides/backend.md").write_text("uncommitted changes")
+        with self.assertRaisesRegex(ValueError, "clean"):
+            install.build_plan(target)
+        self.assertEqual(list(target.iterdir()), [])
+
+    def test_setup_requires_confirmed_details_and_same_pinned_source(self):
+        target = self.install_draft()
+        with self.assertRaises(ValueError):
+            update.plan(target)
+        draft = json.loads((target / ".swarmstack/project.json").read_text())
+        with self.assertRaises(ValueError):
+            update.plan(target, configure=draft)
+        self.change_source()
+        with self.assertRaisesRegex(ValueError, "installed toolkit revision"):
+            update.plan(target, configure=config())
+
+    def test_claude_mappings_survive_later_toolkit_update(self):
+        target = self.install_draft("claude")
+        proposal, _ = update.plan(target, configure=config())
+        update.apply(target, proposal["approval_id"], configure=config())
+        self.change_source()
+        proposal, _ = update.plan(target)
+        update.apply(target, proposal["approval_id"])
+        self.assertTrue((target / ".claude/skills/swarmstack/SKILL.md").exists())
+        self.assertEqual(stack.report(target, True)["state"], "installed")
+
+    def test_install_and_setup_cli_are_distinct(self):
+        target = self.base / "cli-project"; target.mkdir()
+        command = [sys.executable, str(self.source / "scripts/install.py"), "--target", str(target), "--host", "both"]
+        preview = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(preview.returncode, 0, preview.stderr)
+        self.assertEqual(list(target.iterdir()), [])
+        applied = subprocess.run(command + ["--apply"], capture_output=True, text=True)
+        self.assertEqual(applied.returncode, 0, applied.stderr)
+        self.assertEqual(stack.report(target)["state"], "setup_required")
+        accepted = self.base / "accepted.json"; accepted.write_text(json.dumps(config()))
+        setup = [sys.executable, str(self.source / "scripts/update.py"), "--project", str(target), "--configure", str(accepted)]
+        preview = subprocess.run(setup, capture_output=True, text=True)
+        self.assertEqual(preview.returncode, 0, preview.stdout + preview.stderr)
+        approval = json.loads(preview.stdout)["approval_id"]
+        applied = subprocess.run(setup + ["--apply", approval], capture_output=True, text=True)
+        self.assertEqual(applied.returncode, 0, applied.stdout + applied.stderr)
+        self.assertEqual(stack.report(target, True)["phase"], "configured")
 
     def test_not_installed_and_partial_setup_are_truthful(self):
         empty = self.base / "empty"; empty.mkdir()

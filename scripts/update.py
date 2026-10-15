@@ -19,18 +19,32 @@ def current_bytes(root, name):
     return path.read_bytes() if path.exists() else None
 
 
-def plan(project):
+def plan(project, *, configure=None, keep_existing=()):
     root = stack.project_root(project)
     bootstrap.safe_directory(root)
-    config, old = stack.load_install(root)
+    config, old = stack.load_install(root, allow_draft=True)
+    if configure is not None:
+        if old.get("phase") != "installed":
+            raise ValueError("project setup already exists; nothing was changed")
+        config = configure
+    elif old.get("phase") == "installed":
+        raise ValueError("run /swarmstack setup before updating a configured project")
+    if keep_existing and configure is None:
+        raise ValueError("keep-existing is only for explicitly reviewed first setup")
     pending = stack.unfinished_updates(root)
     if pending:
         raise ValueError("reconcile unfinished update receipts before another update")
     source = bootstrap.snapshot()
     if source["source_dirty"]:
         raise ValueError("update source must be a clean, reviewed Git checkout")
-    desired = bootstrap.render_outputs(config)
-    desired.pop(LOCK)
+    if configure is not None and source["revision"] != old.get("revision"):
+        raise ValueError("setup must use the installed toolkit revision")
+    desired = bootstrap.render_outputs(config, skill_hosts=old.get("skill_hosts", ["codex"]))
+    desired_lock = json.loads(desired.pop(LOCK))
+    for name in keep_existing:
+        stack.managed_name(name)
+        if name in PROTECTED or name not in desired:
+            raise ValueError("invalid keep-existing setup path")
     if bootstrap.snapshot() != source:
         raise ValueError("source changed while preparing update; review a fresh checkout")
     for name in desired:
@@ -50,7 +64,13 @@ def plan(project):
         base = old["files"].get(name)
         after = desired.get(name)
         target = stack.digest(after) if after is not None else None
-        if name in PROTECTED:
+        if name in keep_existing:
+            if before is None:
+                raise ValueError("keep-existing path is missing")
+            preserved.append(name)
+            next_files[name] = base if base is not None else target
+            continue
+        if name in PROTECTED and not (configure is not None and (name == ".swarmstack/project.json" or base is None)):
             if before is None:
                 conflicts.append({"path": name, "reason": "missing project-owned record"})
             else:
@@ -62,7 +82,7 @@ def plan(project):
             else:
                 next_files[name] = target
             continue
-        if present != base:
+        if present != base and not (configure is not None and name == ".swarmstack/project.json"):
             if target == base:
                 preserved.append(name)
             else:
@@ -80,9 +100,9 @@ def plan(project):
             next_files[name] = target
     old_lock = current_bytes(root, LOCK)
     expected[LOCK] = stack.digest(old_lock)
-    new_lock = {"toolkit": "SwarmStack", **source, "files": next_files}
+    new_lock = {"toolkit": "SwarmStack", "phase": "configured", "skill_hosts": desired_lock["skill_hosts"], **source, "files": next_files}
     payloads[LOCK] = (json.dumps(new_lock, indent=2) + "\n").encode()
-    data = {"project": str(root), "from_revision": old.get("revision"), "to_revision": source["revision"],
+    data = {"project": str(root), "operation": "configure" if configure is not None else "update", "from_revision": old.get("revision"), "to_revision": source["revision"],
             "changes": changes, "conflicts": conflicts, "preserved": preserved, "expected": expected,
             "manifest_after": stack.digest(payloads[LOCK])}
     data["approval_id"] = stack.digest(json.dumps(data, sort_keys=True).encode())
@@ -106,8 +126,8 @@ def write_receipt(path, data):
     replace_file(path, (json.dumps(data, indent=2) + "\n").encode())
 
 
-def apply(project, approval_id):
-    data, payloads = plan(project)
+def apply(project, approval_id, *, configure=None, keep_existing=()):
+    data, payloads = plan(project, configure=configure, keep_existing=keep_existing)
     if data["approval_id"] != approval_id:
         raise ValueError("proposal or project/source state changed; review a fresh preview")
     if data["conflicts"]:
@@ -159,7 +179,7 @@ def apply(project, approval_id):
         except OSError:
             pass
         raise RuntimeError("update interrupted; preserve backup and reconcile receipt " + str(receipt_path)) from exc
-    return {"state": "updated", "revision": data["to_revision"], "changed": changed, "preserved": data["preserved"],
+    return {"state": "configured" if configure is not None else "updated", "revision": data["to_revision"], "changed": changed, "preserved": data["preserved"],
             "receipt": str(receipt_path), "runtime_verified": False}
 
 
@@ -167,9 +187,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True, type=Path)
     parser.add_argument("--apply", metavar="APPROVAL_ID", help="apply only the exact reviewed preview")
+    parser.add_argument("--configure", type=Path, help="confirmed first-setup config for an installed draft")
+    parser.add_argument("--keep-existing", action="append", default=[], help="explicitly reviewed setup integration to preserve")
     args = parser.parse_args()
     try:
-        result = apply(args.project, args.apply) if args.apply else plan(args.project)[0]
+        configure = json.loads(args.configure.read_text(encoding="utf-8")) if args.configure else None
+        options = {"configure": configure, "keep_existing": args.keep_existing}
+        result = apply(args.project, args.apply, **options) if args.apply else plan(args.project, **options)[0]
         print(json.dumps(result, indent=2))
         return 1 if result.get("conflicts") else 0
     except (ValueError, OSError, RuntimeError, TypeError) as exc:

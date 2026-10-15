@@ -2,9 +2,9 @@
 
 SwarmStack is a set of instructions, skills and small Python scripts for running a team of AI coding agents on one project. One orchestrator hands each GitHub issue to its own lead agent. The lead builds the change, tests it and fixes review findings. You get asked only when a decision is actually yours to make.
 
-You copy SwarmStack into a project once. After that, your agents read it like any other project instructions. It isn't a service and doesn't run in the background.
+Install the skills in a project first, then use `/swarmstack setup` to configure its instructions. After that, your agents read them like any other project guidance. It isn't a service and doesn't run in the background.
 
-**Start here:** [set up a project](SETUP.md). **To understand it first:** [design](docs/design.md), [orchestrator guide](guides/orchestrator.md), [glossary](docs/glossary.md).
+**Start here:** [install the skills](INSTALL.md), then [configure the project](SETUP.md). **To understand it first:** [design](docs/design.md), [orchestrator guide](guides/orchestrator.md), [glossary](docs/glossary.md).
 
 ## What's included
 
@@ -52,16 +52,22 @@ There is no `/swarm health`. Update uses a clean, reviewed checkout and an exact
 
 ## Add it to a project
 
-Type `/swarmstack setup` in the project, or ask an agent to read [SETUP.md](SETUP.md) and follow the [project setup procedure](skills/swarmstack/references/setup.md). It reads your project, asks about anything it can't work out, and shows you a configuration to approve before installing anything.
+**1. Install the skills locally.** Clone the toolkit outside your project, then preview and apply the installation:
 
 ```sh
-python3 scripts/bootstrap.py --target /path/to/project --config /path/to/confirmed-project.json
-# This only previews. Add --apply once you have reviewed the plan.
+git clone https://github.com/SasaSlivova-IS/SwarmStack.git /path/to/SwarmStack
+python3 /path/to/SwarmStack/scripts/install.py --target /path/to/project --host both
+# After reviewing the preview:
+python3 /path/to/SwarmStack/scripts/install.py --target /path/to/project --host both --apply
 ```
 
-The installer copies the guides, skills and templates you selected into the project. It doesn't run project commands, install dependencies, change global agent settings or create branches. If the project already has files at those paths, the installer stops, and you have to merge them by hand.
+Choose `codex`, `claude` or `both`. The installer adds project-local skill files and reusable resources with a draft configuration. It leaves your existing AGENTS.md and application files alone. No global installation or project commands. See [installation instructions and a copyable agent prompt](INSTALL.md).
 
-Each project uses a fixed SwarmStack commit. To update, review the diff and install the new version.
+**2. Fill in the project details.** Refresh the host's skill discovery, then type `/swarmstack setup`. It inspects your codebase, asks about unresolved requirements and permissions, and prepares the project configuration and AGENTS.md integration for approval. Installation alone does not configure or start the swarm.
+
+Existing configured projects get a short "already set up" message. Existing instructions and templates are integrated through a reviewed change; the agent prepares that work rather than asking you to merge files by hand. [Setup procedure](SETUP.md).
+
+Each installation records a toolkit commit. Use `/swarmstack update` for a reviewed upgrade after project setup is complete.
 
 ## Check the toolkit itself
 

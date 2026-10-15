@@ -8,6 +8,9 @@ from pathlib import Path, PurePosixPath
 import re
 import sys
 
+# Importing the shared validator must not create cache files inside the project.
+sys.dont_write_bytecode = True
+
 from configuration import normalise_config, validate
 
 PROJECT_RECORDS = {".swarmstack/project.json", ".swarmstack/state.md", ".swarmstack/decisions.md"}
@@ -37,7 +40,7 @@ def managed_name(name):
         return name
     if re.fullmatch(r"\.github/ISSUE_TEMPLATE/[A-Za-z0-9_.-]+\.yml", name):
         return name
-    if re.fullmatch(r"\.agents/skills/[a-z0-9-]+/(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+", name):
+    if re.fullmatch(r"\.(?:agents|claude)/skills/[a-z0-9-]+/(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+", name):
         return name
     if re.fullmatch(r"\.swarmstack/(?:[A-Za-z0-9_.-]+|(?:guides|scripts|licenses|templates)/[A-Za-z0-9_.-]+)", name):
         if name != ".swarmstack/lock.json":
@@ -56,12 +59,19 @@ def safe_path(root, name):
     return path
 
 
-def load_install(root):
+def load_install(root, *, allow_draft=False):
     config = json.loads(safe_path(root, ".swarmstack/project.json").read_text(encoding="utf-8"))
     lock = json.loads(safe_path(root, ".swarmstack/lock.json").read_text(encoding="utf-8"))
-    validate(normalise_config(config))
     if not isinstance(lock, dict) or lock.get("toolkit") != "SwarmStack" or not isinstance(lock.get("files"), dict) or not lock["files"]:
         raise ValueError("invalid installation manifest")
+    phase = lock.get("phase", "configured")
+    if phase not in {"installed", "configured"}:
+        raise ValueError("unknown installation phase")
+    if not isinstance(config, dict) or config.get("status") != ("draft" if phase == "installed" else "confirmed"):
+        raise ValueError("inconsistent installation phase and configuration")
+    if phase == "installed" and not allow_draft:
+        raise ValueError("run /swarmstack setup before using the configured project")
+    validate(normalise_config(config), draft=phase == "installed")
     seen = set()
     for name, value in lock["files"].items():
         managed_name(name)
@@ -92,7 +102,7 @@ def report(project, health=False):
     if not (root / ".swarmstack").exists() and not (root / ".swarmstack").is_symlink():
         return {**result, "state": "not_installed"}
     try:
-        config, lock = load_install(root)
+        config, lock = load_install(root, allow_draft=True)
     except (ValueError, OSError, TypeError) as exc:
         return {**result, "state": "incomplete", "errors": [str(exc)]}
     missing, modified, errors = [], [], []
@@ -134,7 +144,8 @@ def report(project, health=False):
                         errors.append("missing or symlinked local link in " + name)
             except (ValueError, OSError) as exc:
                 errors.append(str(exc))
-    return {**result, "state": "attention_needed" if missing or errors or pending else "installed",
+    return {**result, "state": "attention_needed" if missing or errors or pending else "setup_required" if lock.get("phase") == "installed" else "installed",
+            "phase": lock.get("phase", "configured"), "skill_hosts": lock.get("skill_hosts", ["codex"]),
             "revision": lock.get("revision"), "source_dirty": lock.get("source_dirty", False),
             "skills": config["skills"], "configured_host": config.get("swarm", {}).get("host"),
             "host_discovery": "unverified", "upstream_version": "not_checked",

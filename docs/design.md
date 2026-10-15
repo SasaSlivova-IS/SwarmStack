@@ -61,3 +61,7 @@ The user-facing swarm skill exposes intent-level controls backed by a standalone
 ## Command ownership
 
 [Command language](../CONTEXT.md) separates /swarm team controls, /swarmstack project commands and independent skills. The project router loads only the selected setup, help, status, health or update reference. Legacy setup-project and swarmstack-help configuration entries map to swarmstack for fresh adoption; installed snapshots require a reviewed migration.
+
+## Installation before setup
+
+The project-local installer makes skills and reusable resources available without filling project details, replacing AGENTS.md or granting execution. Setup follows installation to inspect the codebase, interview its owner and apply approved configuration/instruction integration. Installation and configuration are distinct recorded phases; later updates retain the chosen host mappings.

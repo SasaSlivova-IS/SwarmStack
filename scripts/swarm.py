@@ -34,6 +34,18 @@ def parse_command(text, repository):
     return "direction", "https://github.com/" + repository + "/issues/" + match[2], "queue"
 
 
+def validate_options(options):
+    if not isinstance(options, dict) or set(options) != {"host", "orchestrator", "direction_cooldown_seconds", "status_ttl_seconds"}:
+        raise ValueError("configure the swarm host, orchestrator and cooldowns first")
+    if options["host"] not in {"t3", "codex", "claude", "manual"} or not isinstance(options["orchestrator"], str) or not options["orchestrator"].strip():
+        raise ValueError("verify and configure one actual orchestrator identity")
+    for key, minimum, maximum in [("direction_cooldown_seconds", MIN_COOLDOWN, 31536000), ("status_ttl_seconds", 0, 3600)]:
+        value = options[key]
+        if type(value) is not int or not minimum <= value <= maximum:
+            raise ValueError("invalid " + key)
+    return options
+
+
 def project_config(project):
     root = Path(os.path.abspath(project))
     if not root.is_dir() or any(p.is_symlink() for p in (root, *root.parents)):
@@ -46,14 +58,7 @@ def project_config(project):
     options = config.get("swarm", {})
     if config.get("schema_version") != 1 or config.get("status") != "confirmed" or not isinstance(repo, str) or not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repo):
         raise ValueError("confirmed v1 project configuration is required")
-    if not isinstance(options, dict) or set(options) != {"host", "orchestrator", "direction_cooldown_seconds", "status_ttl_seconds"}:
-        raise ValueError("configure the swarm host, orchestrator and cooldowns first")
-    if options["host"] not in {"t3", "codex", "claude", "manual"} or not isinstance(options["orchestrator"], str) or not options["orchestrator"].strip():
-        raise ValueError("verify and configure one actual orchestrator identity")
-    for key, minimum, maximum in [("direction_cooldown_seconds", MIN_COOLDOWN, 31536000), ("status_ttl_seconds", 0, 3600)]:
-        value = options[key]
-        if type(value) is not int or not minimum <= value <= maximum:
-            raise ValueError("invalid " + key)
+    validate_options(options)
     return root, repo.lower(), options
 
 
@@ -157,6 +162,9 @@ class Gate:
         outstanding = self.inflight()
         if outstanding:
             return self.output("DEFER", pending, reason="reconcile outstanding host delivery first; never resend under a new key", outstanding_command=outstanding["id"], eligible_at=self.get("eligible_at", 0))
+        if pending["target"] == self.get("active_direction"):
+            self.db.execute("UPDATE commands SET state='noop' WHERE id=?", (pending["id"],))
+            return self.output("ALREADY_ACTIVE", target=pending["target"], route="none", eligible_at=self.get("eligible_at", 0))
         if self.get("paused", False) or self.get("pause_requested", False):
             return self.output("DEFER", pending, reason="goal is paused; direction does not resume it", eligible_at=self.get("eligible_at", 0))
         if self.clock_rollback:
@@ -221,7 +229,7 @@ def main():
     try:
         if args.action == "request" and (not 1 <= len(args.request_id) <= 200 or any(ord(c) < 32 for c in args.request_id)):
             raise ValueError("use the stable original user-message ID")
-        is_pause = args.action == "request" and args.command.strip() == "/swarm pause"
+        is_pause = args.action == "request" and args.command.split() == ["/swarm", "pause"]
         try:
             gate = Gate(args.project, immediate=is_pause)
         except (ValueError, OSError, sqlite3.Error, TypeError) as exc:

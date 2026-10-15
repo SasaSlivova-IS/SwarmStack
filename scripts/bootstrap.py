@@ -75,21 +75,27 @@ def snapshot():
     return {"revision": git("rev-parse", "HEAD"), "source_dirty": bool(git("status", "--porcelain", "--untracked-files=normal"))}
 
 
+def optional_swarm(body, enabled):
+    pattern = r"<!-- swarm:start -->(.*?)<!-- swarm:end -->"
+    return re.sub(pattern, lambda match: match[1].strip() if enabled else "", body, flags=re.S)
+
+
 def build_plan(target, config):
     target = safe_directory(target)
     validate(config)
+    uses_swarm = "swarm" in config["skills"]
     outputs = {}
     def add(name, data):
         if name in outputs:
             raise ValueError("duplicate output: " + name)
         outputs[name] = data.encode() if isinstance(data, str) else data
-    add("AGENTS.md", (ROOT / "templates/project/AGENTS.md").read_text().replace("{{PROJECT_NAME}}", config["name"]))
+    add("AGENTS.md", optional_swarm((ROOT / "templates/project/AGENTS.md").read_text().replace("{{PROJECT_NAME}}", config["name"]), uses_swarm))
     add(".swarmstack/project.json", json.dumps(config, indent=2) + "\n")
     add(".swarmstack/state.md", "# Current project state\n\nSetup adopted; project behavior is not yet qualified. Root records issue owners, pins, blockers, next actions and evidence here.\n")
     add(".swarmstack/decisions.md", "# Accepted setup\n\nThe user-confirmed project.json is the setup decision. Record future accepted changes and unresolved questions here; installation is not runtime acceptance.\n")
     add("docs/agents/issue-tracker.md", "# Issue tracker\n\nGitHub repository: " + config["github_repository"] + "\n\nRead issues with the host connector or gh issue view NUMBER --repo " + config["github_repository"] + ". Use full accepted scope and relevant comments, not only titles. Posting, closing and merging require project authority. One dedicated thread per issue.\n")
     for src in sorted((ROOT / "guides").glob("*.md")):
-        body = src.read_text().replace("../skills/", "../../.agents/skills/")
+        body = optional_swarm(src.read_text(), uses_swarm).replace("../skills/", "../../.agents/skills/")
         add(".swarmstack/guides/" + src.name, body)
     setup = (ROOT / "SETUP.md").read_text().replace("](skills/", "](../.agents/skills/")
     add(".swarmstack/SETUP.md", setup)
@@ -100,15 +106,7 @@ def build_plan(target, config):
         spec = spec_from_file_location("swarm_gate", ROOT / "scripts/swarm.py")
         module = module_from_spec(spec)
         spec.loader.exec_module(module)
-        options = config.get("swarm", {})
-        if set(options) != {"host", "orchestrator", "direction_cooldown_seconds", "status_ttl_seconds"}:
-            raise ValueError("confirm swarm host/orchestrator/cooldowns during setup")
-        if options["host"] not in {"t3", "codex", "claude", "manual"} or not isinstance(options["orchestrator"], str) or not options["orchestrator"].strip():
-            raise ValueError("confirm an actual orchestrator binding")
-        if type(options["direction_cooldown_seconds"]) is not int or options["direction_cooldown_seconds"] < module.MIN_COOLDOWN or options["direction_cooldown_seconds"] > 31536000:
-            raise ValueError("direction cooldown must be at least five hours")
-        if type(options["status_ttl_seconds"]) is not int or not 0 <= options["status_ttl_seconds"] <= 3600:
-            raise ValueError("invalid report cache TTL")
+        module.validate_options(config.get("swarm", {}))
         add(".swarmstack/scripts/swarm.py", (ROOT / "scripts/swarm.py").read_bytes())
         add(".swarmstack/local/.gitignore", "*\n!.gitignore\n")
     for src in sorted((ROOT / ".github/ISSUE_TEMPLATE").glob("*.yml")):

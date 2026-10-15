@@ -62,6 +62,14 @@ class Adoption(unittest.TestCase):
         self.assertFalse(any(config()["authority"].values()))
         self.assertEqual(json.loads((self.target / ".swarmstack/project.json").read_text()), config())
 
+    def test_legacy_six_skill_setup_has_no_dangling_swarm_instructions(self):
+        legacy = config(); legacy["skills"].remove("swarm"); legacy.pop("swarm")
+        result = self.invoke(legacy, "--apply")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(checks.link_errors(self.target), [])
+        self.assertFalse((self.target / ".agents/skills/swarm").exists())
+        self.assertFalse((self.target / ".swarmstack/scripts/swarm.py").exists())
+
     def test_existing_agents_is_preserved_and_no_partial_setup(self):
         (self.target / "AGENTS.md").write_text("existing authority")
         result = self.invoke(config(), "--apply")

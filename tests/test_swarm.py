@@ -70,6 +70,15 @@ class Swarm(unittest.TestCase):
         self.assertEqual(self.call("request", "/swarm backend", "message3", now=1004)["status"], "ALREADY_ACTIVE")
         self.assertEqual(self.call("next", now=20000)["status"], "EMPTY")
 
+    def test_repeated_inflight_direction_does_not_relay_after_first_application(self):
+        first = self.call("request", "/swarm backend", "first")
+        self.assertEqual(self.call("request", "/swarm backend", "repeat", now=1001)["status"], "DEFER")
+        self.call("receipt", first["command_id"], "delivered", "host", now=1002)
+        self.call("receipt", first["command_id"], "applied", now=1003)
+        result = self.call("next", now=19004)
+        self.assertEqual((result["status"], result["route"]), ("ALREADY_ACTIVE", "none"))
+        self.assertEqual(self.call("next", now=19005)["status"], "EMPTY")
+
     def test_applied_receipt_is_idempotent_and_does_not_extend_window(self):
         offered = self.apply()
         self.assertEqual(self.call("receipt", offered["command_id"], "applied", now=2000)["status"], "ALREADY_RECORDED")
@@ -147,6 +156,15 @@ class Swarm(unittest.TestCase):
         rc, result = self.cli("request", "/swarm pause", "--request-id", "pause")
         self.assertEqual((rc, result["status"], result["route"], result["persisted"]), (0, "ALLOW", "steer", False))
         self.assertEqual(result["orchestrator"], "fixture-root")
+
+    def test_whitespace_pause_preserves_unavailable_state_fallback(self):
+        local = self.project / ".swarmstack/local"; local.mkdir()
+        (local / "swarm.sqlite3").write_bytes(b"corrupt fixture")
+        for command in ["/swarm   pause", "/swarm\tpause"]:
+            with self.subTest(command=command):
+                rc, result = self.cli("request", command, "--request-id", "pause")
+                self.assertEqual((rc, result["status"], result["route"]), (0, "ALLOW", "steer"))
+                self.assertFalse(result["persisted"])
 
     def test_pause_still_routes_while_another_process_owns_the_sqlite_lock(self):
         self.call("request", "/swarm status", "init")

@@ -6,7 +6,7 @@ Own priorities, dependencies, resource allocation, model selection, review, inte
 
 ## Threads and branches
 
-One purple orchestrator, one accountable lead per issue, including mixed frontend/backend work. Name issue leads `<colour> <worker ordinal> | #<GitHub issue> <issue name>`, such as `🟡 4 | #42 NDA egress and text anonymization`. Blue/yellow require the issue; red/green and general black work may omit it. Worker numbers are separate, unique within a role and never recycled after settlement.
+One purple orchestrator, one accountable lead per issue, including mixed frontend/backend work. Name issue leads `<colour> <worker ordinal> | #<GitHub issue> <issue name>`, such as `🟡 4 | #17 Export invoices as CSV`. Blue/yellow require the issue; red/green and general black work may omit it. Worker numbers are separate, unique within a role and never recycled after settlement.
 
 Take a fresh inventory before allocating numbers. If hidden archives are unavailable, record the limitation and obtain one naming disposition rather than stall every launch. Do not claim a complete archive audit.
 
@@ -30,7 +30,7 @@ Read a finite queue batch at a safe boundary. Reconcile old grants/pins and pres
 
 At completed submission load [review](review.md). Return full findings to the same lead for validation, fixes or evidence-based rebuttal. Reviewers do not replace implementers.
 
-Integrate qualified coherent dependencies at an exact candidate; run relevant combined checks. Follow project merge/promotion grants. A review PASS grants no push, deployment or real-data effects.
+Integrate qualified coherent dependencies at an exact candidate; run relevant combined checks. Follow project merge/promotion grants.
 
 Close only when all accepted issue scope/findings are resolved, required checks pass on delivered source/artifact, the fix is integrated into the agreed branch and required human acceptance is recorded. Child PASS or merged slice is not issue Done. Do not attach unrelated release gates to a completed issue.
 

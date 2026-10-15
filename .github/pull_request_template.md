@@ -8,7 +8,7 @@
 
 ## Scope and dependencies
 
-<!-- Identify the affected behavior, actual PR base and required companion changes. Link relevant decisions and authority for any external effects. This template grants no merge, deployment, provider or account authority. Use issue-closing keywords only when the owning issue's Done criteria are met. -->
+<!-- Identify the affected behavior, actual PR base and required companion changes. Link relevant decisions and authority for any external effects. Use issue-closing keywords only when the owning issue's Done criteria are met. -->
 
 Related issue:
 Dependencies:

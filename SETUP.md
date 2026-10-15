@@ -42,7 +42,7 @@ Fill [project.example.json](templates/project.example.json). Keep status draft u
 
 Agree the actual requirements/glossary paths, runtime commands and existing guidance to preserve. Missing discovery blocks affected work. A blank starter file does not settle requirements.
 
-For the core swarm skill, confirm the actual host and orchestrator identity, at least five hours between routine applied directions and a short status cache TTL. Pausing remains immediate; these controls grant no extra effects.
+For the core swarm skill, confirm the actual host and orchestrator identity, at least five hours between routine applied directions and a short status cache TTL. Pausing remains immediate.
 
 Show outcome, workflow, models/budget, verification and effects in one short review. Record answers in the project's decisions record. Unresolved decisions remain pending; they are not permission to start dependent work.
 
@@ -59,4 +59,4 @@ Target must be an existing real directory outside this toolkit, with no symlink 
 
 Read generated guidance/configuration and check local links, actual skill discovery and host tools. Preview does not prove loaded instructions. Run agreed project checks only under accepted authority, then pilot one small real issue. Installed guides may be reusable starting points; project facts must be filled and confirmed before work.
 
-Setup ends with accepted configuration and verified installation or an explicit blocker. It grants no new paid call, remote upload, production merge, destructive cleanup or deployment.
+Setup ends with accepted configuration and verified installation or an explicit blocker.

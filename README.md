@@ -1,40 +1,53 @@
 # SwarmStack
 
-Reusable guidance for an agent swarm that finishes issues, verifies its work and keeps the human out of routine coordination.
+SwarmStack is a set of instructions, skills and small Python scripts for running a team of AI coding agents on one project. One orchestrator hands each GitHub issue to its own lead agent. The lead builds the change, tests it and fixes review findings. You get asked only when a decision is actually yours to make.
 
-Built with customised skills originating from [Matt Pocock](https://github.com/mattpocock/skills) and communication guidance adapted from [Ayoub Ghriss](https://github.com/ayghri/i-have-adhd). The read-only help workflow is adapted from [Lauren Tan’s pstack](https://github.com/cursor/plugins/tree/main/pstack). See [Credits](CREDITS.md) for sources, modifications and retained licences.
+You copy SwarmStack into a project once. After that, your agents read it like any other project instructions. It isn't a service and doesn't run in the background.
 
-**Start:** [project setup](SETUP.md). **Review:** [design](docs/design.md), [orchestrator](guides/orchestrator.md), [first-version review](docs/review.md).
+**Start here:** [set up a project](SETUP.md). **To understand it first:** [design](docs/design.md), [orchestrator guide](guides/orchestrator.md), [glossary](docs/glossary.md).
 
-## Included
+## What's included
 
-1. A core [swarm command skill](skills/swarm/SKILL.md) with a standalone, restart-persistent cooldown gate.
-2. One orchestrator, dedicated issue leads, coloured threads and isolated workspaces.
-3. Model-and-effort routing using Artificial Analysis, measured task cost and a Pareto frontier.
-4. Your customised grill-with-docs and code-review skills, plus focused setup, delivery and communication recipes.
-5. Problem-first [PR](.github/pull_request_template.md), [bug](.github/ISSUE_TEMPLATE/bug.yml) and [feature](.github/ISSUE_TEMPLATE/feature.yml) formats.
-6. An interactive setup guide and preview-first installer that refuses existing files.
+1. **Role guides** for the orchestrator, issue leads (frontend, backend, debugging, other work), user-facing chats, reviewers and child agents. See [guides/](guides).
+2. **Thread rules:** one orchestrator, one dedicated lead and thread per issue, colour-coded roles and a separate workspace for each writer.
+3. **Model selection guidance**, plus an offline script that compares models on quality, cost and speed and drops any option that another one beats on every count.
+4. **Skills:** interview the user before decisions ([grill-with-docs](skills/grill-with-docs/SKILL.md)), review code ([code-review](skills/code-review/SKILL.md)), set up a project, submit finished work, and write short, plain replies.
+5. **GitHub templates** for [pull requests](.github/pull_request_template.md), [bug reports](.github/ISSUE_TEMPLATE/bug.yml) and [feature requests](.github/ISSUE_TEMPLATE/feature.yml). Each one starts with the problem, not the solution.
+6. **An installer** that shows you every file it plans to write, and refuses to overwrite anything that already exists.
 
-## Command the swarm
+## Steering the swarm
 
-Ask `/swarmstack-help <question>` for an explanation, one suggested prompt and the owning documentation. The [help skill](skills/swarmstack-help/SKILL.md) does not dispatch work, contact Root or change cooldown state. Host skill discovery still requires adoption.
+Type these in your user-facing chat:
 
-`/swarm backend`, `/swarm frontend`, `/swarm <issue-link>` and `/swarm auto` set direction. `/swarm status` and `/swarm blockers` read progress. `/swarm pause` and `/swarm resume` control the same goal. Directions share a minimum five-hour window; pause never waits for it.
+| Command | What it does |
+| --- | --- |
+| `/swarm backend`, `/swarm frontend` | Prioritise ready backend or frontend issues. |
+| `/swarm <issue-link>` | Prioritise one issue. |
+| `/swarm auto` | Let the orchestrator choose again. |
+| `/swarm status`, `/swarm blockers` | Show progress, or what is waiting on you. |
+| `/swarm pause` | Stop starting new work right away. Running work is saved at a safe point. |
+| `/swarm resume` | Continue the same goal from where it paused. |
 
-The helper is an ordinary Python process using local SQLite, independent of the chat host. It does not send messages or keep a service running. Read the [command and receipt contract](skills/swarm/references/commands.md) and [verification limits](docs/swarm-verification.md) before adopting it.
+Changes of direction (the first four rows) are limited to one every five hours, so the swarm isn't pulled back and forth. Pause and resume ignore that limit.
 
-## Adopt in another project
+A small Python script keeps track of these commands in a local SQLite file, so the limit survives chat restarts. It doesn't send messages or run as a service. Before relying on it, read the [command contract](skills/swarm/references/commands.md) and [what has been verified](docs/swarm-verification.md).
 
-Ask an agent to read [SETUP.md](SETUP.md) and invoke [setup-project](skills/setup-project/SKILL.md). It inspects the project, asks unresolved questions and proposes a concrete configuration before installation.
+Not sure what to ask? `/swarmstack-help <question>` answers from the documentation, suggests one prompt and links the source. It doesn't start work or message the orchestrator. Your chat tool must be able to find the skill first; check that during setup.
+
+## Add it to a project
+
+Ask an agent to read [SETUP.md](SETUP.md) and run the [setup-project](skills/setup-project/SKILL.md) skill. It reads your project, asks about anything it can't work out, and shows you a configuration to approve before installing anything.
 
 ```sh
 python3 scripts/bootstrap.py --target /path/to/project --config /path/to/confirmed-project.json
-# Preview only. Add --apply after reviewing the output plan.
+# This only previews. Add --apply once you have reviewed the plan.
 ```
 
-The installer creates a project-local snapshot of selected guides, skills and templates. It runs no configured command, installs no dependencies, changes no global agent/harness settings and creates no branches. Existing projects need a reviewed migration if destination files already exist.
+The installer copies the guides, skills and templates you selected into the project. It doesn't run project commands, install dependencies, change global agent settings or create branches. If the project already has files at those paths, the installer stops, and you have to merge them by hand.
 
-## Check this toolkit
+Each project uses a fixed SwarmStack commit. To update, review the diff and install the new version.
+
+## Check the toolkit itself
 
 ```sh
 python3 scripts/check.py
@@ -42,10 +55,14 @@ python3 -m unittest discover -s tests -v
 python3 scripts/model_frontier.py examples/models.illustrative.json --allow-illustrative
 ```
 
-Optional manual CI: copy templates/github/check.yml to .github/workflows/check.yml only with the needed GitHub permissions. It is not installed automatically.
+Requires Python 3.10 or later and uses only the standard library. The model data in `examples/` is made up for testing. It isn't a real ranking.
 
-Python 3.10+, standard library only. GitHub forms require GitHub; core procedures are portable. See [host adapters](adapters/README.md).
+To run these checks on GitHub, copy `templates/github/check.yml` to `.github/workflows/check.yml`. It isn't installed automatically, because it needs workflow permissions on your repository.
 
-The model example is invented test data, not a live ranking or spending grant. Actual models, commands, budget and authority live in each project's configuration. Adoption pins a toolkit commit; updates require a reviewed diff.
+The issue and PR templates need GitHub. Everything else works with any chat tool that can read project files; see [host adapters](adapters/README.md) for what to check.
 
-Original material is MIT licensed. Imported/customised skills retain their notices and origins in [THIRD_PARTY.md](THIRD_PARTY.md).
+## Credits and licence
+
+Some skills are adapted from other people's work: grill-with-docs and code-review from [Matt Pocock](https://github.com/mattpocock/skills), the reply-style skill from [Ayoub Ghriss](https://github.com/ayghri/i-have-adhd), and the help skill from [Lauren Tan's pstack](https://github.com/cursor/plugins/tree/main/pstack). [CREDITS.md](CREDITS.md) lists what was changed.
+
+Original SwarmStack material is MIT licensed. Adapted material keeps its original notices in [THIRD_PARTY.md](THIRD_PARTY.md).

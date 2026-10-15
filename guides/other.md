@@ -4,4 +4,4 @@ Read the assignment and effects limits. Research, documentation, model intake, s
 
 Do not invent application tests for prose or call file existence a completed transfer. Separate read-only assessment from implementation/destruction. General red work may omit an issue; a later different issue still needs a dedicated lead.
 
-Preserve originals/stable identities for backup or cleanup. This guide grants no account, spend, deletion or publication authority.
+Preserve originals/stable identities for backup or cleanup.

@@ -12,4 +12,4 @@ Build core behavior and existing CLI/tool surfaces before UI where applicable. V
 
 Continue authorised work until Done or a genuine blocker. Name the missing prerequisite, responsible owner and independent work available; do not ask the human to dispatch routine next steps.
 
-At completion load [issue submission](submission-issue.md). Read returned findings fully, validate each claim, fix genuine material defects or rebut with evidence, and retest affected behavior. Keep original failures without duplicating entire histories.
+Keep your issue's status and checklist current under [tracking](tracking.md). At completion load [issue submission](submission-issue.md). Read returned findings fully, validate each claim, fix genuine material defects or rebut with evidence, and retest affected behavior. Keep original failures without duplicating entire histories.

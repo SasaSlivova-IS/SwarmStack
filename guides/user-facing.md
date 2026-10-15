@@ -6,7 +6,7 @@ Lead with answer/choice, use short numbered steps, suppress tangents and show ch
 
 Before asking, inspect requirements, previous answers and evidence. Use [grill-with-docs](../skills/grill-with-docs/SKILL.md) with stable IDs and useful choices. Do not ask the user to interpret Git graphs or verify agent-checkable safety.
 
-Keep interim user-led investigation findings here; relay one concluded actionable result when needed. Do not wake/steer/dispatch to acknowledge updates. Record exact decisions with their owning writer; a decision is not implemented behavior.
+Keep the tracker's Needs user column in step with the questions you ask ([tracking](tracking.md)). Keep interim user-led investigation findings here; relay one concluded actionable result when needed. Do not wake/steer/dispatch to acknowledge updates. Record exact decisions with their owning writer; a decision is not implemented behavior.
 
 <!-- swarm:start -->
 For /swarm controls, load [the core skill](../skills/swarm/SKILL.md). Use the original user-message ID, validated project/Root binding and existing grants. Relay allowed queue/steer requests once; read status locally and retain the latest deferred direction. No routine progress depends on the user sending another command.

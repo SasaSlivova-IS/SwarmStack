@@ -8,7 +8,7 @@ You copy SwarmStack into a project once. After that, your agents read it like an
 
 ## What's included
 
-1. **Role guides** for the orchestrator, issue leads (frontend, backend, debugging, other work), user-facing chats, reviewers and child agents. See [guides/](guides).
+1. **Role guides** for the orchestrator, issue tracking, issue leads (frontend, backend, debugging, other work), user-facing chats, reviewers and child agents. See [guides/](guides).
 2. **Thread rules:** one orchestrator, one dedicated lead and thread per issue, colour-coded roles and a separate workspace for each writer.
 3. **Model selection guidance**, plus an offline script that compares models on quality, cost and speed and drops any option that another one beats on every count.
 4. **Skills:** interview the user before decisions ([grill-with-docs](skills/grill-with-docs/SKILL.md)), review code ([code-review](skills/code-review/SKILL.md)), set up a project, submit finished work, write short, plain replies, and find loose ends ([loose-ends](skills/loose-ends/SKILL.md)).

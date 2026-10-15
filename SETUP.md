@@ -16,6 +16,7 @@ Use [grill-with-docs](skills/grill-with-docs/references/procedure.md): explanati
 | Sources | Repository/issues, requirements, glossary, accepted decisions and current owners. |
 | Verification | Actual test/lint/type/build commands, isolated environment, UI/platform needs and human acceptance. |
 | Workflow | Primary/integration branches, issue branches/worktrees, review/merge/closure rules. |
+| Tracking | Milestones, board columns, sub-issue use and where evidence is stored ([tracking](guides/tracking.md)). |
 | Authority | Thread/branch creation, pushing, PRs, integration, promotion, deployment and real-data limits. |
 | Models | Live host catalogue, chosen role models/efforts, subscriptions, data restrictions and budget. |
 | Communication | Green channels, brevity, decision batching, escalation, actual Root/host binding and swarm cooldowns. |

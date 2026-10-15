@@ -16,6 +16,8 @@ Use an issue branch/worktree per writer. Agree shared interfaces and file owners
 
 ## Dispatch and intake
 
+Keep the issue tracker, milestones and board current under [tracking](tracking.md).
+
 Inspect actual leads/children/queues once at coordination boundaries. Dispatch independent Ready issues within real host/resource capacity. A waiting child or user hold is not a stall; completed parents may have live children.
 
 Give complete scope, Done criteria, source base, owning requirements, allowed effects, model/effort and role guide. Children get bounded assignments, not the whole swarm prompt. Do not turn milestone slices into whole-issue claims.

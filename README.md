@@ -36,7 +36,19 @@ Lost track? `/loose-ends cover` goes back through the current conversation and l
 
 Not sure what to ask? `/swarmstack help <question>` answers from the documentation, suggests one prompt and links the source. It doesn't start work or message the orchestrator. Your chat tool must be able to find the skill first; check that during setup.
 
-The command split is simple: `/swarm` controls the running team; `/swarmstack` manages the project through setup and help. Standalone skills such as `/grill-with-docs` stay separate. Each project command loads its own procedure.
+The command split is simple: `/swarm` controls the running team; `/swarmstack` manages the project through setup, help, status, health and update. Standalone skills such as `/grill-with-docs` stay separate. Each project command loads its own procedure.
+
+## Project toolkit commands
+
+| Command | Purpose | Changes anything? |
+| --- | --- | --- |
+| `/swarm status` | Work finished, current progress, next steps and stalled work. | No, report only. |
+| `/swarm blockers` | What is blocked, why, who can unblock it and user decisions needed. | No, report only. |
+| `/swarmstack status` | Local installed version, enabled skills, configured host and modifications. | No network or writes. |
+| `/swarmstack health` | Missing files, broken local links, unsafe paths and incomplete updates. | No repairs or project tests. |
+| `/swarmstack update` | Fetch an upstream candidate, preview the diff and preserve local customisations. | Applies only after approval of the exact preview. |
+
+There is no `/swarm health`. Update uses a clean, reviewed checkout and an exact approval ID. Conflicts stop application; settings, decisions, project state and swarm state stay preserved. Backups and interruption receipts stay local. See [update procedure](skills/swarmstack/references/update.md) and [verification](docs/project-management-verification.md). Actual host discovery and native platform support remain separate checks.
 
 ## Add it to a project
 

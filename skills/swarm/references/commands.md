@@ -17,6 +17,12 @@ Use a full HTTPS issue URL in the configured GitHub repository, not a bare numbe
 
 Natural language can map to these intents when clear. Ambiguous changes need one concise clarification. Root retains issue decomposition, lead ownership, workspaces, review, tests, corrections and authorised integration. The user need not dispatch those steps manually.
 
+## Status and blockers
+
+/swarm status reports what finished, what is happening and what comes next. Flag stalled work from actual current evidence. /swarm blockers reports what cannot proceed, why, who can unblock it and which decisions belong to the user. A held issue does not mean the whole swarm must stop. Both reports are observational; do not restart, repair, redispatch or replace a goal from a report request. Read facts locally first and queue one request only for genuinely missing Root-only information.
+
+There is no /swarm health command. /swarmstack status reports the installed toolkit, /swarmstack health checks installation problems, and /swarmstack update changes it only through a reviewed preview. These commands do not manage live agents.
+
 ## Local gate
 
 Requires Python 3.10+ with standard-library sqlite3. No T3 SDK, network, global configuration or server process is used. From an adopted project's root:

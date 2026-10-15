@@ -1,9 +1,7 @@
 """Preview-first project adoption. Never executes project commands or overwrites files."""
 import argparse
-import copy
 import hashlib
 import json
-import math
 import os
 from pathlib import Path
 import re
@@ -11,9 +9,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = {"grill-with-docs", "code-review", "delivery", "adhd-output", "unslop", "swarm", "loose-ends", "swarmstack"}
-AUTHORITY = {"create_threads", "create_branches", "push_issue_branches", "open_prs", "merge_integration", "promote_production", "deploy"}
-
+from configuration import normalise_config, validate
 
 def safe_directory(path):
     path = Path(os.path.abspath(path))
@@ -24,62 +20,6 @@ def safe_directory(path):
     if path == ROOT or ROOT in path.parents or path in ROOT.parents:
         raise ValueError("target must be separate from the toolkit, not its ancestor")
     return path
-
-
-def local_path(value):
-    return isinstance(value, str) and bool(value) and not value.startswith(("/", "\\")) and not re.match(r"^[A-Za-z]:", value) and ".." not in value.replace("\\", "/").split("/")
-
-
-def validate(config):
-    required = {"schema_version", "status", "name", "goal", "success", "github_repository", "primary_branch", "integration_branch", "requirements_path", "glossary_path", "test_environment", "commands", "models", "budget", "authority", "human_ux_acceptance_required", "skills"}
-    if not required <= set(config) or set(config) - required - {"swarm"} or config.get("schema_version") != 1 or config.get("status") != "confirmed":
-        raise ValueError("use the exact v1 configuration and confirm setup first")
-    for field in ["name", "goal", "success", "github_repository", "primary_branch", "integration_branch", "test_environment"]:
-        value = config[field]
-        if not isinstance(value, str) or not value.strip() or any(x in value for x in ["REPLACE_", "SELECT_", "\n", "\r"]):
-            raise ValueError("unresolved or invalid field: " + field)
-    if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", config["github_repository"]):
-        raise ValueError("github_repository must be owner/repository")
-    if not all(local_path(config[f]) for f in ["requirements_path", "glossary_path"]):
-        raise ValueError("requirements/glossary must use project-relative paths")
-    if set(config["commands"]) != {"test", "lint", "typecheck", "build"}:
-        raise ValueError("commands must name test/lint/typecheck/build, nullable when inapplicable")
-    for name, command in config["commands"].items():
-        if command is not None and (not isinstance(command, str) or not command.strip() or "REPLACE_" in command):
-            raise ValueError("unresolved command: " + name)
-    if not config["commands"]["test"]:
-        raise ValueError("an actual test/check command is required")
-    if set(config["authority"]) != AUTHORITY or not all(type(v) is bool for v in config["authority"].values()):
-        raise ValueError("authority grants must be explicit booleans")
-    if type(config["human_ux_acceptance_required"]) is not bool:
-        raise ValueError("human acceptance policy must be explicit")
-    budget = config["budget"]
-    if set(budget) != {"spend_limit_usd", "paid_overage", "allowed_data"}:
-        raise ValueError("invalid budget fields")
-    cost = budget["spend_limit_usd"]
-    if type(cost) not in (int, float) or not math.isfinite(cost) or cost < 0 or type(budget["paid_overage"]) is not bool or not isinstance(budget["allowed_data"], str) or not budget["allowed_data"].strip():
-        raise ValueError("invalid budget or data permission")
-    if not isinstance(config["skills"], list) or not config["skills"] or len(set(config["skills"])) != len(config["skills"]) or not set(config["skills"]) <= SKILLS:
-        raise ValueError("select known unique skills")
-    if not {"grill-with-docs", "code-review", "swarmstack", "delivery", "adhd-output", "unslop"} <= set(config["skills"]):
-        raise ValueError("select the core skills, including swarmstack for project setup")
-    if set(config["models"]) != {"frontend", "backend", "review"}:
-        raise ValueError("select frontend/backend/review models from the live host")
-    for model in config["models"].values():
-        if not isinstance(model, dict) or set(model) != {"provider", "model", "effort"} or any(not isinstance(v, str) or not v.strip() or "SELECT_" in v for v in model.values()):
-            raise ValueError("model IDs and efforts must be resolved")
-
-
-def normalise_config(config):
-    config = copy.deepcopy(config)
-    skills = config.get("skills")
-    if not isinstance(skills, list) or any(not isinstance(s, str) for s in skills):
-        raise ValueError("select known unique skills")
-    if len(set(skills)) != len(skills):
-        raise ValueError("select known unique skills")
-    aliases = {"setup-project": "swarmstack", "swarmstack-help": "swarmstack"}
-    config["skills"] = list(dict.fromkeys(aliases.get(s, s) for s in skills))
-    return config
 
 
 def snapshot():
@@ -93,8 +33,7 @@ def optional_swarm(body, enabled):
     return re.sub(pattern, lambda match: match[1].strip() if enabled else "", body, flags=re.S)
 
 
-def build_plan(target, config):
-    target = safe_directory(target)
+def render_outputs(config):
     config = normalise_config(config)
     validate(config)
     uses_swarm = "swarm" in config["skills"]
@@ -114,13 +53,10 @@ def build_plan(target, config):
     setup = (ROOT / "SETUP.md").read_text().replace("](skills/", "](../.agents/skills/")
     add(".swarmstack/SETUP.md", setup)
     add(".swarmstack/templates/project.example.json", (ROOT / "templates/project.example.json").read_bytes())
+    add(".swarmstack/scripts/configuration.py", (ROOT / "scripts/configuration.py").read_bytes())
+    add(".swarmstack/scripts/stack.py", (ROOT / "scripts/stack.py").read_bytes())
     add(".swarmstack/scripts/model_frontier.py", (ROOT / "scripts/model_frontier.py").read_bytes())
     if "swarm" in config["skills"]:
-        from importlib.util import module_from_spec, spec_from_file_location
-        spec = spec_from_file_location("swarm_gate", ROOT / "scripts/swarm.py")
-        module = module_from_spec(spec)
-        spec.loader.exec_module(module)
-        module.validate_options(config.get("swarm", {}))
         add(".swarmstack/scripts/swarm.py", (ROOT / "scripts/swarm.py").read_bytes())
         add(".swarmstack/local/.gitignore", "*\n!.gitignore\n")
     for src in sorted((ROOT / ".github/ISSUE_TEMPLATE").glob("*.yml")):
@@ -131,8 +67,8 @@ def build_plan(target, config):
             if not src.is_file():
                 continue
             body = src.read_text()
-            if src.relative_to(ROOT / "skills" / name).as_posix() == "references/setup.md" and name == "swarmstack":
-                body = body.replace("../../../SETUP.md", "../../../../.swarmstack/SETUP.md")
+            if name == "swarmstack" and src.parent.name == "references":
+                body = body.replace("../../../SETUP.md", "../../../../.swarmstack/SETUP.md").replace("../../../scripts/stack.py", "../../../../.swarmstack/scripts/stack.py")
             if src.name == "SKILL.md":
                 body = body.replace("../../SETUP.md", "../../../.swarmstack/SETUP.md").replace("../../guides/", "../../../.swarmstack/guides/").replace("../../scripts/", "../../../.swarmstack/scripts/")
             add(".agents/skills/" + name + "/" + src.relative_to(ROOT / "skills" / name).as_posix(), body)
@@ -144,6 +80,12 @@ def build_plan(target, config):
     add(".swarmstack/THIRD_PARTY.md", (ROOT / "THIRD_PARTY.md").read_text().replace("skills/*/", "../.agents/skills/*/"))
     lock = {"toolkit": "SwarmStack", **snapshot(), "files": {name: hashlib.sha256(data).hexdigest() for name, data in outputs.items()}}
     add(".swarmstack/lock.json", json.dumps(lock, indent=2) + "\n")
+    return outputs
+
+
+def build_plan(target, config):
+    target = safe_directory(target)
+    outputs = render_outputs(config)
     for name in outputs:
         dest = target / name
         if dest.exists() or dest.is_symlink():

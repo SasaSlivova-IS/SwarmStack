@@ -11,7 +11,7 @@ import sys
 import time
 from urllib.parse import urlsplit
 
-MIN_COOLDOWN = 5 * 60 * 60
+from configuration import MIN_COOLDOWN, validate_options
 VERSION = 1
 INFLIGHT = ("offered", "delivered", "uncertain")
 
@@ -32,18 +32,6 @@ def parse_command(text, repository):
     if url.scheme != "https" or url.netloc.lower() != "github.com" or not match or match[1].lower() != repository.lower():
         raise ValueError("provide an HTTPS GitHub issue link for this configured repository")
     return "direction", "https://github.com/" + repository + "/issues/" + match[2], "queue"
-
-
-def validate_options(options):
-    if not isinstance(options, dict) or set(options) != {"host", "orchestrator", "direction_cooldown_seconds", "status_ttl_seconds"}:
-        raise ValueError("configure the swarm host, orchestrator and cooldowns first")
-    if options["host"] not in {"t3", "codex", "claude", "manual"} or not isinstance(options["orchestrator"], str) or not options["orchestrator"].strip():
-        raise ValueError("verify and configure one actual orchestrator identity")
-    for key, minimum, maximum in [("direction_cooldown_seconds", MIN_COOLDOWN, 31536000), ("status_ttl_seconds", 0, 3600)]:
-        value = options[key]
-        if type(value) is not int or not minimum <= value <= maximum:
-            raise ValueError("invalid " + key)
-    return options
 
 
 def project_config(project):

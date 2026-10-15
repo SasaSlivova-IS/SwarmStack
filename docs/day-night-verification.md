@@ -19,3 +19,5 @@ Projects pinned to an earlier toolkit revision need a reviewed `/swarmstack upda
 ## Independent review
 
 The initial Standards and Spec reviews passed with no findings. Security identified one Important instruction mismatch: the night handoff could enable an auto-resume setting while checking it. The correction makes day/night inspection-only for those settings; any toggle requires a separate explicitly authorised setup action. The original finding remains retained in the [review record](reviews/day-night-reviews.json).
+
+The corrected candidate `e723f1c` passed independent Security review with C0/I0/M0; the original Important finding is closed. The final helper also passed all 33 command-gate tests on Python 3.14. Standards and Spec each remain C0/I0/M0 on the initial implementation; the correction changes only the auto-resume wording and review records.

@@ -34,5 +34,13 @@
     }
   },
   "author_response": "Accepted. The night procedure now explicitly says day/night never toggles a setting. Missing setup is separately authorised outside the command. No helper execution behavior changed.",
-  "correction_review": "PENDING"
+  "correction_review": {
+    "candidate": "e723f1c",
+    "axis": "Security",
+    "verdict": "PASS",
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "report": "Original Important finding closed. availability.md:21 now replaces enabling with inspection/reporting, explicitly prohibits day/night toggling settings and requires separate explicit authorization outside the command. The initial Security CHANGES REQUIRED C0/I1/M0 remains preserved. No introduced authority, privacy or recovery findings. Full-context inspection confirms separate availability state, latest-intent protection, delivery-before-application, retained uncertainty and unchanged pause/direction. Morning briefing remains read-only, with timers, spending expansion and setting changes prohibited. Source-only review; tests inspected but not executed. No imports, accounts, host actions or mutations."
+  }
 }

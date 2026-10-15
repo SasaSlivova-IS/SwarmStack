@@ -56,7 +56,8 @@
     "adhd-output",
     "unslop",
     "swarm",
-    "swarmstack-help"
+    "swarmstack-help",
+    "loose-ends"
   ],
   "swarm": {
     "host": "manual",

@@ -21,6 +21,7 @@ Resolve local paths from the toolkit root. In an adopted project, guides and SET
 | Review and findings | [skills/code-review/SKILL.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/skills/code-review/SKILL.md), then its references/procedure.md |
 | Done, issue versus child handoff | [guides/submission-issue.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/guides/submission-issue.md), guides/submission-child.md |
 | Model/effort selection and benchmark limits | [guides/models.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/guides/models.md) |
+| Catching up, missed questions and open decisions | [skills/loose-ends/SKILL.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/skills/loose-ends/SKILL.md), then its references/procedure.md |
 | Concise communication | [skills/adhd-output/SKILL.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/skills/adhd-output/SKILL.md), skills/unslop/SKILL.md |
 | PR and issue format | [.github/pull_request_template.md](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/.github/pull_request_template.md), .github/ISSUE_TEMPLATE/ |
 

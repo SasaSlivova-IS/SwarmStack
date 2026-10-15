@@ -25,11 +25,13 @@ The customised procedures live in each skill's references/procedure.md. They are
 
 The imported code-review workflow's smell baseline uses the vocabulary of Martin Fowler's [Refactoring](https://martinfowler.com/books/refactoring.html), as identified in the original customised procedure. This credit is for the underlying concepts, not a bundled copy of the book.
 
+The idea behind loose-ends catchup, a short catch-up with action items after time away, comes from Lauren Tan's pstack [ketchup](https://github.com/cursor/plugins/tree/main/pstack/skills/ketchup) skill. SwarmStack's loose-ends text is original; no ketchup text is bundled.
+
 [Artificial Analysis](https://artificialanalysis.ai/) is a referenced model-evaluation source. SwarmStack does not bundle live scores or claim authorship of its benchmarks.
 
 ## Original and future work
 
-The standalone swarm command gate, setup installer, offline Pareto helper, project templates and setup/delivery/editing recipes were authored for SwarmStack. Shared ideas do not imply that their creators endorsed this toolkit.
+The standalone swarm command gate, setup installer, offline Pareto helper, project templates and setup/delivery/editing/loose-ends recipes were authored for SwarmStack. Shared ideas do not imply that their creators endorsed this toolkit.
 
 When adapting another source, add the author, exact source, licence and modifications before publication. Keep [THIRD_PARTY.md](THIRD_PARTY.md), [provenance.json](provenance.json) and distributed central notices consistent. Do not include private-project examples, names or identifying context in attribution.
 

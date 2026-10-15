@@ -11,7 +11,7 @@ You copy SwarmStack into a project once. After that, your agents read it like an
 1. **Role guides** for the orchestrator, issue leads (frontend, backend, debugging, other work), user-facing chats, reviewers and child agents. See [guides/](guides).
 2. **Thread rules:** one orchestrator, one dedicated lead and thread per issue, colour-coded roles and a separate workspace for each writer.
 3. **Model selection guidance**, plus an offline script that compares models on quality, cost and speed and drops any option that another one beats on every count.
-4. **Skills:** interview the user before decisions ([grill-with-docs](skills/grill-with-docs/SKILL.md)), review code ([code-review](skills/code-review/SKILL.md)), set up a project, submit finished work, and write short, plain replies.
+4. **Skills:** interview the user before decisions ([grill-with-docs](skills/grill-with-docs/SKILL.md)), review code ([code-review](skills/code-review/SKILL.md)), set up a project, submit finished work, write short, plain replies, and find loose ends ([loose-ends](skills/loose-ends/SKILL.md)).
 5. **GitHub templates** for [pull requests](.github/pull_request_template.md), [bug reports](.github/ISSUE_TEMPLATE/bug.yml) and [feature requests](.github/ISSUE_TEMPLATE/feature.yml). Each one starts with the problem, not the solution.
 6. **An installer** that shows you every file it plans to write, and refuses to overwrite anything that already exists.
 
@@ -31,6 +31,8 @@ Type these in your user-facing chat:
 Changes of direction (the first four rows) are limited to one every five hours, so the swarm isn't pulled back and forth. Pause and resume ignore that limit.
 
 A small Python script keeps track of these commands in a local SQLite file, so the limit survives chat restarts. It doesn't send messages or run as a service. Before relying on it, read the [command contract](skills/swarm/references/commands.md) and [what has been verified](docs/swarm-verification.md).
+
+Lost track? `/loose-ends cover` goes back through the current conversation and lists unanswered questions, offers nobody confirmed, contradictions and missing pieces. `/loose-ends catchup` catches you up on the whole project after time away. Neither changes anything; open decisions come back as A–D questions.
 
 Not sure what to ask? `/swarmstack-help <question>` answers from the documentation, suggests one prompt and links the source. It doesn't start work or message the orchestrator. Your chat tool must be able to find the skill first; check that during setup.
 

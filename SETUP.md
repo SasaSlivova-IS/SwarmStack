@@ -8,7 +8,7 @@ Read existing AGENTS.md, README, build/package manifests, CI, requirements, issu
 
 ## 2. Interview in short batches
 
-Use [grill-with-docs](skills/grill-with-docs/references/procedure.md): explanation, checked current state, one independent question and useful lettered options. Default to at most three questions per batch. Keep stable S1, S2 identifiers and actual free-text answers. No response is not confirmation.
+Use [grill-with-docs](skills/grill-with-docs/references/procedure.md): explanation, use case, checked current state, one independent question and four lettered options. Default to at most three questions per batch. Keep stable S1, S2 identifiers and actual free-text answers. No response is not confirmation.
 
 | Topic | Establish |
 | --- | --- |
@@ -26,6 +26,8 @@ Use [grill-with-docs](skills/grill-with-docs/references/procedure.md): explanati
 
 **Explanation:** Reviewed issue branches need a shared candidate before production promotion.
 
+**Use case:** Two leads finish related issues on the same day and both changes must be tested together before anyone ships them.
+
 **Current state:** The repository has main; no integration policy was found.
 
 **Question:** Which workflow should this project use?
@@ -33,6 +35,7 @@ Use [grill-with-docs](skills/grill-with-docs/references/procedure.md): explanati
 - **A, recommended for a multi-agent app:** Use experimental for integration; the user controls production promotion.
 - **B:** Target main through reviewed PRs with human merge approval.
 - **C:** Use an existing branch you name.
+- **D:** Decide after the first pilot issue; until then, agents open PRs but nobody merges.
 
 Continue independent inspection while waiting. Ask about actual ambiguity, authority and cost, not every reversible implementation choice.
 

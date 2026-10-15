@@ -6,7 +6,7 @@ SwarmStack combines original tooling and guidance with adapted work by other aut
 
 [Matt Pocock's skills](https://github.com/mattpocock/skills) are the source of two customised workflows:
 
-- **grill-with-docs:** [original skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs), [our entrypoint](skills/grill-with-docs/SKILL.md). The customised procedure adds the explicit Explanation → Current state → Question → lettered-options format, stable IDs, checked previous answers and exact decision recording.
+- **grill-with-docs:** [original skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs), [our entrypoint](skills/grill-with-docs/SKILL.md). The customised procedure adds the explicit Explanation → Use case → Current state → Question → four lettered options format, stable IDs, checked previous answers and exact decision recording.
 - **code-review:** [original skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review), [our entrypoint](skills/code-review/SKILL.md). Our customised version keeps separate Standards/Spec reviews, adds a conditional Security specialist, severity labels, read-only reviewers and an evidence-based fix/rebuttal loop.
 
 The workflow-improvement checklist also draws on his list of common agent-workflow mistakes supplied during toolkit design.

@@ -1,12 +1,12 @@
 ---
 name: grill-with-docs
-description: Ask grounded decision questions with explanation, current state and lettered choices.
+description: Ask grounded decision questions with explanation, use case, current state and four lettered choices.
 disable-model-invocation: true
 ---
 
 # Grill with docs
 
-Questions follow **Explanation → Current state → Question → lettered options**, with stable IDs and checked documentation.
+Questions follow **Explanation → Use case → Current state → Question → A–D options**, with stable IDs and checked documentation.
 
 Load [the question procedure](references/procedure.md) when this skill is invoked. Do not load it for unrelated work.
 

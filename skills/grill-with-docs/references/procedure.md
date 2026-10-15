@@ -17,11 +17,13 @@ Use the project's records and source to identify decisions that still need the u
 
 ## Question format
 
-Use these four parts, in this order, for every question:
+Use these five parts, in this order, for every question:
 
 ### <existing number or identifier>. <short topic>
 
-**Explanation:** Explain the workflow and why the decision matters. Define unfamiliar terms and use a short example when it helps.
+**Explanation:** Explain what the decision is about and why it matters. Define unfamiliar terms.
+
+**Use case:** One concrete situation, with a person and an action, where the choice changes what happens.
 
 **Current state:** State what is already decided, what is implemented or verified, and the exact remaining gap. Name or link the specific records/code checked in one short sentence. Do not bury this in an audit narrative.
 
@@ -30,9 +32,9 @@ Use these four parts, in this order, for every question:
 - **A — Recommended:** A concrete choice and its practical consequence.
 - **B:** A distinct alternative and its practical consequence.
 - **C:** A distinct alternative and its practical consequence.
-- **D:** A distinct alternative, or a demonstration/defer option when that is useful.
+- **D:** A distinct alternative, or a demonstration/defer option when no fourth real alternative exists.
 
-Keep the recommendation first when one is justified. Preserve original letters when restating an existing question; mark the recommended existing choice instead of changing its letter. Do not invent incompatible or meaningless choices just to fill four slots. The user may answer in free text. Avoid unexplained implementation jargon and rhetorical questions.
+Always give four options. Keep the recommendation first when one is justified. Preserve original letters when restating an existing question; mark the recommended existing choice instead of changing its letter. Do not invent incompatible or meaningless choices to fill four slots; use a demonstration or defer option instead. The user may answer in free text. Avoid unexplained implementation jargon and rhetorical questions.
 
 Default to 3–5 independent questions per batch unless the user requests another amount or all remaining questions. End with a compact answer example using the actual identifiers. Continue work that does not depend on the answers.
 

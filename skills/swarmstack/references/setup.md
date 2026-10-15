@@ -1,6 +1,16 @@
 # Project setup
 
-Set SwarmStack up in the current project, or the project the user names. Read [the setup guide](../../../SETUP.md), then use [grill-with-docs](../../grill-with-docs/SKILL.md). Inspect first, interview in short batches, record exact answers, propose concrete configuration, preview the installer output and obtain confirmation before apply. Defaults and silence are not grants.
+Set SwarmStack up in the current project, or the project the user names.
+
+## Check for existing setup first
+
+Before finding the toolkit, reading the full setup guide or starting an interview, check whether the target project already contains .swarmstack. If it exists, reply:
+
+> SwarmStack setup already exists in this project. Nothing was changed.
+
+Then stop. Do not rerun setup, launch checks, start an interview, or offer a migration automatically. This message reports existing setup material, not verified completeness or runtime readiness. An explicit request to inspect, repair or update that material is separate work under the existing grants.
+
+For a new project, read [the setup guide](../../../SETUP.md), then use [grill-with-docs](../../grill-with-docs/SKILL.md). Inspect first, interview in short batches, record exact answers, propose concrete configuration, preview the installer output and obtain confirmation before apply. Defaults and silence are not grants.
 
 ## Find the toolkit
 
@@ -8,7 +18,7 @@ Setup needs a SwarmStack checkout for its installer. Use the checkout this skill
 
 ## Existing projects
 
-If .swarmstack already exists, inspect its project configuration and pinned revision if recorded. Its presence alone does not prove a complete installation. Any updates or partial-install recovery need a reviewed migration preserving existing files, not a blind fresh install.
+Only when the user explicitly requests inspection, repair or an update, inspect the existing project configuration and pinned revision if recorded. Existing material does not prove a complete installation. Any updates or partial-install recovery need a reviewed migration preserving existing files, not a blind fresh install.
 
 Legacy configuration names setup-project and swarmstack-help map to swarmstack during new adoption. They do not create additional slash commands. Existing installed skill directories are not deleted or overwritten by bootstrap; propose their removal only as part of an explicitly approved migration.
 

@@ -15,6 +15,10 @@ The local customised procedures are preserved in each skill's references/procedu
 
 [Ayoub Ghriss's i-have-adhd](https://github.com/ayghri/i-have-adhd) informs [adhd-output](skills/adhd-output/SKILL.md). Our condensed adaptation keeps concise, action-oriented communication while avoiding forced timing estimates, repetitive narration and unnecessary user tasks. [Retained MIT notice](licenses/i-have-adhd.txt).
 
+## Lauren Tan
+
+[Lauren Tan / poteto](https://github.com/poteto) authored pstack’s [poteto-help](https://github.com/cursor/plugins/blob/e5136d82418d2db3165ea1050d17577cd618cc05/pstack/skills/poteto-help/SKILL.md). Our [swarmstack-help](https://github.com/SasaSlivova-IS/SwarmStack/blob/main/skills/swarmstack-help/SKILL.md) adapts its read-only question routing, source-backed answers and suggested-prompt format to SwarmStack’s actual workflows. Cursor-specific setup, modes and unavailable skills are omitted. [Retained MIT notice](licenses/pstack.txt).
+
 ## Conceptual references
 
 The imported code-review workflow's smell baseline uses the vocabulary of Martin Fowler's [Refactoring](https://martinfowler.com/books/refactoring.html), as identified in its preserved procedure. This credit is for the underlying concepts, not a bundled copy of the book.

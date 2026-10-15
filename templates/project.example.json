@@ -55,7 +55,8 @@
     "delivery",
     "adhd-output",
     "unslop",
-    "swarm"
+    "swarm",
+    "swarmstack-help"
   ],
   "swarm": {
     "host": "manual",

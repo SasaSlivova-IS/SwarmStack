@@ -2,7 +2,7 @@
 
 Reusable guidance for an agent swarm that finishes issues, verifies its work and keeps the human out of routine coordination.
 
-Built with customised skills originating from [Matt Pocock](https://github.com/mattpocock/skills) and communication guidance adapted from [Ayoub Ghriss](https://github.com/ayghri/i-have-adhd). See [Credits](CREDITS.md) for sources, modifications and retained licences.
+Built with customised skills originating from [Matt Pocock](https://github.com/mattpocock/skills) and communication guidance adapted from [Ayoub Ghriss](https://github.com/ayghri/i-have-adhd). The read-only help workflow is adapted from [Lauren Tan’s pstack](https://github.com/cursor/plugins/tree/main/pstack). See [Credits](CREDITS.md) for sources, modifications and retained licences.
 
 **Start:** [project setup](SETUP.md). **Review:** [design](docs/design.md), [orchestrator](guides/orchestrator.md), [first-version review](docs/review.md).
 
@@ -16,6 +16,8 @@ Built with customised skills originating from [Matt Pocock](https://github.com/m
 6. An interactive setup guide and preview-first installer that refuses existing files.
 
 ## Command the swarm
+
+Ask `/swarmstack-help <question>` for an explanation, one suggested prompt and the owning documentation. The [help skill](skills/swarmstack-help/SKILL.md) does not dispatch work, contact Root or change cooldown state. Host skill discovery still requires adoption.
 
 `/swarm backend`, `/swarm frontend`, `/swarm <issue-link>` and `/swarm auto` set direction. `/swarm status` and `/swarm blockers` read progress. `/swarm pause` and `/swarm resume` control the same goal. Directions share a minimum five-hour window; pause never waits for it.
 

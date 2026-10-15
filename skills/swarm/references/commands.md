@@ -31,6 +31,8 @@ python3 .swarmstack/scripts/swarm.py --project . next
 
 In the toolkit checkout, use scripts/swarm.py instead. Project setup must confirm `swarm.host`, the actual `swarm.orchestrator` identity, a direction cooldown of at least18000seconds and the report cache TTL. Older configurations remain usable for their original six skills; they need an explicit configuration/skill update before using this new router. Do not overwrite installed guidance automatically.
 
+Green and Root must invoke the helper against the same confirmed canonical project root. Issue worktrees and cloud exports must not create separate gate databases; if the canonical root is unavailable, report that prerequisite instead of silently starting another gate. Workers do not invoke this user-facing router.
+
 State is `.swarmstack/local/swarm.sqlite3`, protected from accidental Git publication by its directory-local .gitignore. Keep the state on a local disk; shared network filesystems and hostile concurrent file replacement are outside v1's guarantees. SQLite transactions serialize ordinary concurrent invocations. State is bound to the configured project path, repository, host and Root identity; do not copy it between projects.
 
 One compact JSON response names status, route, command ID and stable transport key. ALLOW authorises only the next relay within existing project grants. READ asks Green to inspect facts, not message Root routinely. CACHED includes its observation time. ALREADY_ACTIVE and ALREADY_RECORDED send nothing. DEFER retains the latest pending direction; EMPTY has nothing ready. ERROR is a refusal, not permission to bypass the gate.

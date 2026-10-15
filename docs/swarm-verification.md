@@ -6,7 +6,7 @@ A core user-facing swarm skill backed by a standalone Python/SQLite gate, outsid
 
 ## Candidate verification
 
-Local macOS Python3.14 test coverage includes initial apply/delivery separation; five-hour expiry; pending coalescing and cancellation; repeated receipts/IDs; cross-project URL refusal; cache expiry/invalidation; pause/resume ordering; corrupt/busy state pause fallback; concurrent claims; process-exit recovery; actual abrupt exits before and after SQLite commit; configuration/binding refusal; symlink refusal; and paths containing spaces/non-ASCII characters. The existing setup tests exercise installed skill/script links, unchanged default-false effects, no overwrite and command nonexecution.
+All42 local tests pass on macOS with Python3.11 and3.14. A Python3.10 grammar check passes; it is not a3.10 runtime test. Test coverage includes initial apply/delivery separation; five-hour expiry; pending coalescing and cancellation; repeated receipts/IDs; cross-project URL refusal; cache expiry/invalidation; pause/resume ordering; corrupt/busy state pause fallback; concurrent claims; process-exit recovery; actual abrupt exits before and after SQLite commit; configuration/binding refusal; symlink refusal; and paths containing spaces/non-ASCII characters. The existing setup tests exercise installed skill/script links, unchanged default-false effects, no overwrite and command nonexecution.
 
 The helper performs no network call or bot operation. Host message delivery, receipt authentication, live goal resume and offline wake are outside its guarantees and need the adapter contract.
 
@@ -20,4 +20,4 @@ The optional manual CI template covers ubuntu-latest, macos-latest and windows-l
 
 ## Review and publication
 
-Independent fixed-candidate Standards/Spec/Security reviews are pending. Original source and review findings remain distinguishable from actual host/runtime proof. The command gate is a trusted local convenience layer, not a security permission system or exactly-once distributed transaction. Unknown delivery remains held for supported host-key reconciliation.
+Independent fixed-candidate Standards, Spec and Security correction reviews PASS with zero open findings at62a323e. [Separate reports](reviews/swarm-core-reviews.json) preserve each original severity and correction verdict. Three new regression scenarios genuinely failed before correction: repeated inflight direction was offered again, whitespace pause lost its unavailable-state fallback, and legacy six-skill adoption installed missing links. They pass after correction. The duplicated-options maintainability finding was addressed by one shared validator. Original source and review findings remain distinguishable from actual host/runtime proof. The command gate is a trusted local convenience layer, not a security permission system or exactly-once distributed transaction. Unknown delivery remains held for supported host-key reconciliation.
